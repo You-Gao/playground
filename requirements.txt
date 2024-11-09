@@ -1,0 +1,4 @@
+flask-smorest
+flask
+sendgrid
+gunicorn
