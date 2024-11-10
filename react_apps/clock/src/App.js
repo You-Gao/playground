@@ -6,7 +6,48 @@ import * as THREE from 'three';
 
 function App() {
 	// react sets a hook 
-	var [time, setTime] = useState("00:00:00"); 
+	var [time, setTime] = useState("00:00:00");
+
+	function TimeToPoints() {
+		const date = new Date();
+		const hours = date.getHours();
+		const minutes = date.getMinutes();
+		const seconds = date.getSeconds();
+
+		const minuteAngle = (minutes / 60) * 360;
+		const hourAngle = ( (hours % 12) / 12 ) * 360 + (minutes / 60) * 30; // its 30 because the angle between hours in 30
+		const secondAngle = ( seconds / 60 ) * 360;
+
+		const minuteAngleRad = (minuteAngle - 90) * (Math.PI / 180); // -90 to start at the top (0 degrees)
+		const hourAngleRad = (hourAngle - 90) * (Math.PI / 180); // -90 to start at the top (0 degrees)
+		const secondAngleRad = (secondAngle - 90) * (Math.PI / 180); 
+
+		const radius = 2.5;
+
+		const secondHand = new THREE.Vector3(
+			-radius *Math.cos(secondAngleRad),
+			-radius *Math.sin(secondAngleRad),
+			0 
+		);
+		
+		const minuteHand = new THREE.Vector3(
+		    -radius * Math.cos(minuteAngleRad) * .9, // x = radius * cos(angle)
+		    -radius * Math.sin(minuteAngleRad) * .9, // y = radius * sin(angle)
+		    0 // z = 0 (since we're working on a 2D plane, z is flat)
+		  );
+
+		const hourHand = new THREE.Vector3(
+		    -radius * Math.cos(hourAngleRad) * .8,
+		    -radius * Math.sin(hourAngleRad) * .8,
+		    0
+		  );
+		  secondHand.x = -secondHand.x
+		  minuteHand.x = -minuteHand.x;
+		  hourHand.x = -hourHand.x;
+
+		  // Return the two Vector3 points
+		  return { secondHand, minuteHand, hourHand };
+	}
 
 	// runs 1-2 times on render
 	useEffect(() => {
@@ -26,20 +67,39 @@ function App() {
 	document.body.appendChild( renderer.domElement );
 
 	// objects that are added to the scene
-	const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-	const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-	const cube = new THREE.Mesh( geometry, material );
-	scene.add( cube );
+	const clockGeometry = new THREE.CircleGeometry(3, 64);  // radius 5, 64 segments
+	const clockMaterial = new THREE.MeshBasicMaterial({ color: 0xcccccc, side: THREE.DoubleSide });
+	const clock = new THREE.Mesh(clockGeometry, clockMaterial);
+	scene.add(clock);
+	
+	const material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+	const points = [];
+	points.push( new THREE.Vector3( 0, 0, 0 ) );
+	points.push( new THREE.Vector3( 0, 0, 0 ) );
+	points.push( new THREE.Vector3( 0, 0, 0 ) );
 
-	const light = new THREE.AmbientLight( 0x404040 ); // soft white light
-	scene.add( light );
+	const geometry = new THREE.BufferGeometry().setFromPoints( points );	
+	const line = new THREE.Line( geometry, material );
+	scene.add(line);
+
+	const points_shand = [];
+	points_shand.push( new THREE.Vector3(0,0,0) );
+	points_shand.push( new THREE.Vector3(0,0,0) );	
+	const geometry_shand = new THREE.BufferGeometry().setFromPoints( points_shand );	
+	const line_shand = new THREE.Line( geometry_shand, material );
+	scene.add(line_shand);
 
 	camera.position.z = 5;
 
 	// uses the native webgl animation rendering to update objects 
 	function animate() {
-		cube.rotation.x += 0.01;
-		cube.rotation.y += 0.01;
+		const clockVectors = TimeToPoints();
+		geometry.attributes.position.setXYZ(0, clockVectors.hourHand.x, clockVectors.hourHand.y, clockVectors.hourHand.z);
+		geometry.attributes.position.setXYZ(1, 0, 0, 0);  // Center of the clock (origin)
+		geometry.attributes.position.setXYZ(2, clockVectors.minuteHand.x, clockVectors.minuteHand.y, clockVectors.minuteHand.z);
+		geometry_shand.attributes.position.setXYZ(1, clockVectors.secondHand.x, clockVectors.secondHand.y, 0);
+		geometry.attributes.position.needsUpdate = true;
+		geometry_shand.attributes.position.needsUpdate = true;
 		renderer.render( scene, camera );
 	}
 	renderer.setAnimationLoop( animate );	
