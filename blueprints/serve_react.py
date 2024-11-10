@@ -8,7 +8,7 @@ import logging as log
 bp = Blueprint('forward', 'forward', url_prefix='/', description='Forwarding SendGrid Email Payloads')
 
 log = log.getLogger(__name__)
-react_build_path = r"C:\Users\commo\OneDrive - University of Virginia\School\STEM\CS\Coding Projects 2024\playground\react_apps"
+react_build_path = os.path.join(os.getcwd(), "react_apps")
 
 
 @bp.route('/')
@@ -21,7 +21,9 @@ class ReactView(MethodView):
 @bp.route('/<string:app>/')
 class ReactView(MethodView):
     def get(self, app):
+        print(react_build_path)
         index_path = os.path.join(react_build_path, app, 'build')
+        print(index_path)
         return send_from_directory(index_path, 'index.html')
 
 @bp.route('/<string:app>/static/<string:type>/<string:file>')
