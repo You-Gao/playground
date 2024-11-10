@@ -1,2 +1,2 @@
-web: bash setup.sh && gunicorn app:app
+web: gunicorn app:app
 
