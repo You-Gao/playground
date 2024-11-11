@@ -215,6 +215,11 @@ function App() {
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
+  // canvas load listener
+  window.addEventListener('load', () => {
+    setIsLoaded(true);
+  });
+
 	return () => {
 		renderer.dispose()
 	    if (renderer.domElement.parentElement) {
@@ -223,9 +228,15 @@ function App() {
 	};
 	}, []); // empty array means useeffect will never re-render or "react"
 
+  const [isLoaded, setIsLoaded] = useState(false);
+  // if not loaded return different html
 return (
     <div className="App">
-	  <h1>{time}</h1>
+      { isLoaded ?
+       <h1>{time}</h1> : 
+       <h1>Loading...</h1>
+      }
+	  
     </div>
   );
 }
