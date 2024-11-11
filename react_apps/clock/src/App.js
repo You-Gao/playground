@@ -55,13 +55,12 @@ function App() {
 		  return points;
 	}
 
-  function getGeometryPoints(geometry) {
-    const points = [];
-    for (let i = 0; i < geometry.attributes.position.count; i++) {
-      points.push(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, i));
-    }
-    return points;
+  function compareSecondPoints(point1, point2, tolerance = 1e-6) {
+    return Math.abs(point1.x - point2.x) < tolerance &&
+            Math.abs(point1.y - point2.y) < tolerance &&
+            Math.abs(point1.z - point2.z) < tolerance;
   }
+
 
 	// runs 1-2 times on render
 	useEffect(() => {
@@ -107,17 +106,17 @@ function App() {
 	camera.position.z = 5;
 
 	// uses the native webgl animation rendering to update objects
-  
 	function animate() {
 
     // 0 is second, 1 is minute, 2 is hour
 		const clockVectors = TimeToPoints();
 
-    setTimeout( function() {
-
-        requestAnimationFrame( animate );
-
-    }, 1000 / 30 );
+    // if the second hand has not moved, don't update the scene
+    const secondHand_old = new THREE.Vector3(geometry_shand.attributes.position.getX(1), geometry_shand.attributes.position.getY(1), 0);
+    const secondHand_new = clockVectors[0];
+    if (compareSecondPoints(secondHand_new, secondHand_old)) {
+      return;
+    }
     geometry_shand.attributes.position.setXYZ(1, clockVectors[0].x, clockVectors[0].y, 0);
     geometry.attributes.position.setXYZ(0, clockVectors[1].x, clockVectors[1].y, 0);
     geometry.attributes.position.setXYZ(2, clockVectors[2].x, clockVectors[2].y, 0);
@@ -127,6 +126,13 @@ function App() {
 
 	}
 	renderer.setAnimationLoop( animate );	
+
+  // canvas resize listeners
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
 
 	return () => {
 		renderer.dispose()
