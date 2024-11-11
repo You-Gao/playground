@@ -14,8 +14,8 @@ function App() {
 		const minutes = date.getMinutes();
 		const seconds = date.getSeconds();
 
-		const minuteAngle = (minutes / 60) * 360;
-		const hourAngle = ( (hours % 12) / 12 ) * 360 + (minutes / 60) * 30; // its 30 because the angle between hours in 30
+		const minuteAngle = (minutes / 60) * 360 + (seconds / 60) * 6;
+		const hourAngle = ( (hours % 12) / 12 ) * 360 + (minutes / 60) * 30 + (seconds / 60) * (30/60); // its 30 because the angle between hours in 30
 		const secondAngle = ( seconds / 60 ) * 360;
 
 		const minuteAngleRad = (minuteAngle - 90) * (Math.PI / 180); // -90 to start at the top (0 degrees)
@@ -25,8 +25,8 @@ function App() {
 		const radius = 2.5;
 
 		const secondHand = new THREE.Vector3(
-			-radius *Math.cos(secondAngleRad),
-			-radius *Math.sin(secondAngleRad),
+			-radius *Math.cos(secondAngleRad) * 1.1,
+			-radius *Math.sin(secondAngleRad) * 1.1,
 			0 
 		);
 		
@@ -72,7 +72,7 @@ function App() {
 	const clock = new THREE.Mesh(clockGeometry, clockMaterial);
 	scene.add(clock);
 	
-	const material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+	const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
 	const points = [];
 	points.push( new THREE.Vector3( 0, 0, 0 ) );
 	points.push( new THREE.Vector3( 0, 0, 0 ) );
@@ -82,11 +82,12 @@ function App() {
 	const line = new THREE.Line( geometry, material );
 	scene.add(line);
 
+	const material_shand = new THREE.LineBasicMaterial( {color: 0x000000 } );
 	const points_shand = [];
 	points_shand.push( new THREE.Vector3(0,0,0) );
 	points_shand.push( new THREE.Vector3(0,0,0) );	
 	const geometry_shand = new THREE.BufferGeometry().setFromPoints( points_shand );	
-	const line_shand = new THREE.Line( geometry_shand, material );
+	const line_shand = new THREE.Line( geometry_shand, material_shand );
 	scene.add(line_shand);
 
 	camera.position.z = 5;
