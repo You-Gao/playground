@@ -9,7 +9,7 @@ function App() {
 	// react sets a hook 
 	var [time, setTime] = useState("00:00:00");
 
-	function TimeToPoints() {
+	function TimeToPoints(radius = 2.5) {
 		const date = new Date();
 		const hours = date.getHours();
 		const minutes = date.getMinutes();
@@ -28,11 +28,9 @@ function App() {
 		const hourAngleRad = (hourAngle) * (Math.PI / 180);
 		const secondAngleRad = (secondAngle) * (Math.PI / 180); 
 
-		const radius = 2.5;
-
 		const secondHand = new THREE.Vector3(
-			Math.cos(secondAngleRad - (Math.PI/2)) * radius * 1.1,
-			-Math.sin(secondAngleRad - (Math.PI/2)) * radius * 1.1,
+			Math.cos(secondAngleRad - (Math.PI/2)) * radius * 1,
+			-Math.sin(secondAngleRad - (Math.PI/2)) * radius * 1,
 			0 
 		);
 		
@@ -61,6 +59,9 @@ function App() {
             Math.abs(point1.z - point2.z) < tolerance;
   }
 
+  function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+  }  
 
 	// runs 1-2 times on render
 	useEffect(() => {
@@ -80,7 +81,69 @@ function App() {
 	document.body.appendChild( renderer.domElement );
 
 	// objects that are added to the scene
-	const clockGeometry = new THREE.CircleGeometry(3, 64);  // radius 5, 64 segments
+  const clocks = {};
+  const hands = {}; // [second, minute, hour]
+
+  const screen_width = window.innerWidth;
+  const screen_height = window.innerHeight;
+
+  const clock_amnt = 70;
+  for (let i = 0; i < clock_amnt; i++) {
+    const random_rad = getRandomArbitrary(.5, 1.5);
+
+    // object creation defines which object is on top of the other
+    // the clock is on top of the outline
+    // scnee.add does not define the order of the objects
+    const outlineGeometry = new THREE.CircleGeometry(random_rad + 0.05, 64);
+    const outlineMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+    const outline = new THREE.Mesh(outlineGeometry, outlineMaterial);
+
+    const clockGeometry = new THREE.CircleGeometry(random_rad, 64);
+    const clockMaterial = new THREE.MeshBasicMaterial({ color: 0xcccccc, side: THREE.DoubleSide });
+    const clock = new THREE.Mesh(clockGeometry, clockMaterial);
+    
+    scene.add(outline);
+    scene.add(clock);
+
+    clocks[i] = [clock, random_rad];
+
+    // the minute and hour hand 
+    const material = new THREE.LineBasicMaterial( { color: 0x000000 } );
+    const points = [];
+    points.push( new THREE.Vector3( 0, 0, 0 ) );
+    points.push( new THREE.Vector3( 0, 0, 0 ) );
+    points.push( new THREE.Vector3( 0, 0, 0 ) );
+    const geometry = new THREE.BufferGeometry().setFromPoints( points );
+    const line = new THREE.Line( geometry, material );
+    scene.add(line);
+
+    // the second hand
+    const material_shand = new THREE.LineBasicMaterial( {color: 0xff0000 } );
+    const points_shand = [];
+    points_shand.push( new THREE.Vector3(0,0,0) );
+    points_shand.push( new THREE.Vector3(0,0,0) );
+    const geometry_shand = new THREE.BufferGeometry().setFromPoints( points_shand );
+    const line_shand = new THREE.Line( geometry_shand, material_shand );
+    scene.add(line_shand);
+    hands[i] = [geometry_shand, geometry];
+
+    // set it randomly on the screen
+    clock.position.x = getRandomArbitrary(-8, 8);
+    clock.position.y = getRandomArbitrary(-8, 8);
+    outline.position.x = clock.position.x;
+    outline.position.y = clock.position.y;
+    line.position.x = clock.position.x;
+    line.position.y = clock.position.y;
+    line_shand.position.x = clock.position.x;
+    line_shand.position.y = clock.position.y;
+  }
+
+  const outlineGeometry = new THREE.CircleGeometry(2.5 + 0.05, 64);
+  const outlineMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide });
+  const outline = new THREE.Mesh(outlineGeometry, outlineMaterial);
+  scene.add(outline);
+
+	const clockGeometry = new THREE.CircleGeometry(2.5, 64);
 	const clockMaterial = new THREE.MeshBasicMaterial({ color: 0xcccccc, side: THREE.DoubleSide });
 	const clock = new THREE.Mesh(clockGeometry, clockMaterial);
 	scene.add(clock);
@@ -122,6 +185,24 @@ function App() {
     geometry.attributes.position.setXYZ(2, clockVectors[2].x, clockVectors[2].y, 0);
     geometry.attributes.position.needsUpdate = true;
     geometry_shand.attributes.position.needsUpdate = true;
+
+    // loop through all the clocks and update the hands
+    for (let i = 0; i < clock_amnt; i++) {
+      const clock = clocks[i][0];
+      const radius = clocks[i][1];
+      const hand = hands[i];
+      const clockVectors = TimeToPoints(radius);
+      // second hand
+      hand[0].attributes.position.setXYZ(1, clockVectors[0].x, clockVectors[0].y, 0);
+      // hand[0].attributes.position.setXYZ(0, clock.position.x, clock.position.y, 0); // already set when created
+      // minute and hour hand
+      hand[1].attributes.position.setXYZ(0, clockVectors[1].x, clockVectors[1].y, 0);
+      hand[1].attributes.position.setXYZ(2, clockVectors[2].x, clockVectors[2].y, 0);
+      hand[0].attributes.position.needsUpdate = true;
+      hand[1].attributes.position.needsUpdate = true;
+    
+    }
+
     renderer.render( scene, camera );
 
 	}
