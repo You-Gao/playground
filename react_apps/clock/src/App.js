@@ -14,36 +14,42 @@ function App() {
 		const minutes = date.getMinutes();
 		const seconds = date.getSeconds();
 
+    // test 9:15:45
+    // const hours = 12;
+    // const minutes = 0;
+    // const seconds = 0;
+
 		const minuteAngle = (minutes / 60) * 360 + (seconds / 60) * 6;
 		const hourAngle = ( (hours % 12) / 12 ) * 360 + (minutes / 60) * 30 + (seconds / 60) * (30/60); // its 30 because the angle between hours in 30
 		const secondAngle = ( seconds / 60 ) * 360;
 
-		const minuteAngleRad = (minuteAngle - 90) * (Math.PI / 180); // -90 to start at the top (0 degrees)
-		const hourAngleRad = (hourAngle - 90) * (Math.PI / 180); // -90 to start at the top (0 degrees)
-		const secondAngleRad = (secondAngle - 90) * (Math.PI / 180); 
+		const minuteAngleRad = (minuteAngle) * (Math.PI / 180);
+		const hourAngleRad = (hourAngle) * (Math.PI / 180);
+		const secondAngleRad = (secondAngle) * (Math.PI / 180); 
 
 		const radius = 2.5;
 
 		const secondHand = new THREE.Vector3(
-			-radius *Math.cos(secondAngleRad) * 1.1,
-			-radius *Math.sin(secondAngleRad) * 1.1,
+			Math.cos(secondAngleRad - (Math.PI/2)),
+			-Math.sin(secondAngleRad - (Math.PI/2)),
 			0 
 		);
 		
 		const minuteHand = new THREE.Vector3(
-		    -radius * Math.cos(minuteAngleRad) * .9, // x = radius * cos(angle)
-		    -radius * Math.sin(minuteAngleRad) * .9, // y = radius * sin(angle)
+		    Math.cos(minuteAngleRad - (Math.PI/2)), // x = radius * cos(angle)
+		    -Math.sin(minuteAngleRad - (Math.PI/2)), // y = radius * sin(angle)
 		    0 // z = 0 (since we're working on a 2D plane, z is flat)
 		  );
 
 		const hourHand = new THREE.Vector3(
-		    -radius * Math.cos(hourAngleRad) * .8,
-		    -radius * Math.sin(hourAngleRad) * .8,
+		    Math.cos(hourAngleRad - (Math.PI/2)),
+		    -Math.sin(hourAngleRad - (Math.PI/2)),
 		    0
 		  );
-		  secondHand.x = -secondHand.x
-		  minuteHand.x = -minuteHand.x;
-		  hourHand.x = -hourHand.x;
+
+		  // secondHand.x = -secondHand.x
+		  // minuteHand.x = -minuteHand.x;
+		  // hourHand.x = -hourHand.x;
 
 		  // Return the two Vector3 points
 		  return { secondHand, minuteHand, hourHand };
