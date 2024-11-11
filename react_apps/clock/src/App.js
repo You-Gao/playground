@@ -216,6 +216,10 @@ function App() {
   });
 
   // canvas load listener
+  window.addEventListener('DOMContentLoaded', () => {
+    setIsLoaded(true);
+  });
+
   window.addEventListener('load', () => {
     setIsLoaded(true);
   });
@@ -225,6 +229,17 @@ function App() {
 	    if (renderer.domElement.parentElement) {
 		renderer.domElement.parentElement.removeChild(renderer.domElement);
 	    }
+    window.removeEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+    window.removeEventListener('DOMContentLoaded', () => {
+      setIsLoaded(true);
+    });
+    window.removeEventListener('load', () => {
+      setIsLoaded(true);
+    });
 	};
 	}, []); // empty array means useeffect will never re-render or "react"
 
