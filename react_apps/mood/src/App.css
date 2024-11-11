@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+/* transform works relative to the element's own size */
+input {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+}
