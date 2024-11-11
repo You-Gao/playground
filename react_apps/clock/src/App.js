@@ -30,30 +30,37 @@ function App() {
 		const radius = 2.5;
 
 		const secondHand = new THREE.Vector3(
-			Math.cos(secondAngleRad - (Math.PI/2)),
-			-Math.sin(secondAngleRad - (Math.PI/2)),
+			Math.cos(secondAngleRad - (Math.PI/2)) * radius * 1.1,
+			-Math.sin(secondAngleRad - (Math.PI/2)) * radius * 1.1,
 			0 
 		);
 		
 		const minuteHand = new THREE.Vector3(
-		    Math.cos(minuteAngleRad - (Math.PI/2)), // x = radius * cos(angle)
-		    -Math.sin(minuteAngleRad - (Math.PI/2)), // y = radius * sin(angle)
+		    Math.cos(minuteAngleRad - (Math.PI/2)) * radius * .9, // x = radius * cos(angle)
+		    -Math.sin(minuteAngleRad - (Math.PI/2)) * radius * .9, // y = radius * sin(angle)
 		    0 // z = 0 (since we're working on a 2D plane, z is flat)
 		  );
 
 		const hourHand = new THREE.Vector3(
-		    Math.cos(hourAngleRad - (Math.PI/2)),
-		    -Math.sin(hourAngleRad - (Math.PI/2)),
+		    Math.cos(hourAngleRad - (Math.PI/2)) * radius * .7,
+		    -Math.sin(hourAngleRad - (Math.PI/2)) * radius * .7,
 		    0
 		  );
 
-		  // secondHand.x = -secondHand.x
-		  // minuteHand.x = -minuteHand.x;
-		  // hourHand.x = -hourHand.x;
-
-		  // Return the two Vector3 points
-		  return { secondHand, minuteHand, hourHand };
+		  const points = []
+      points.push(secondHand)
+      points.push(minuteHand)
+      points.push(hourHand)
+		  return points;
 	}
+
+  function getGeometryPoints(geometry) {
+    const points = [];
+    for (let i = 0; i < geometry.attributes.position.count; i++) {
+      points.push(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, i));
+    }
+    return points;
+  }
 
 	// runs 1-2 times on render
 	useEffect(() => {
@@ -101,10 +108,10 @@ function App() {
 	// uses the native webgl animation rendering to update objects 
 	function animate() {
 		const clockVectors = TimeToPoints();
-		geometry.attributes.position.setXYZ(0, clockVectors.hourHand.x, clockVectors.hourHand.y, clockVectors.hourHand.z);
-		geometry.attributes.position.setXYZ(1, 0, 0, 0);  // Center of the clock (origin)
-		geometry.attributes.position.setXYZ(2, clockVectors.minuteHand.x, clockVectors.minuteHand.y, clockVectors.minuteHand.z);
-		geometry_shand.attributes.position.setXYZ(1, clockVectors.secondHand.x, clockVectors.secondHand.y, 0);
+    // 0 is second, 1 is minute, 2 is hour
+		geometry_shand.attributes.position.setXYZ(1, clockVectors[0].x, clockVectors[0].y, 0);
+    geometry.attributes.position.setXYZ(0, clockVectors[1].x, clockVectors[1].y, 0);
+    geometry.attributes.position.setXYZ(2, clockVectors[2].x, clockVectors[2].y, 0);
 		geometry.attributes.position.needsUpdate = true;
 		geometry_shand.attributes.position.needsUpdate = true;
 		renderer.render( scene, camera );
