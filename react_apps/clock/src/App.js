@@ -72,7 +72,7 @@ function App() {
 	const clock = new THREE.Mesh(clockGeometry, clockMaterial);
 	scene.add(clock);
 	
-	const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
+	const material = new THREE.LineBasicMaterial( { color: 0x000000 } );
 	const points = [];
 	points.push( new THREE.Vector3( 0, 0, 0 ) );
 	points.push( new THREE.Vector3( 0, 0, 0 ) );
@@ -82,7 +82,7 @@ function App() {
 	const line = new THREE.Line( geometry, material );
 	scene.add(line);
 
-	const material_shand = new THREE.LineBasicMaterial( {color: 0x000000 } );
+	const material_shand = new THREE.LineBasicMaterial( {color: 0xff0000 } );
 	const points_shand = [];
 	points_shand.push( new THREE.Vector3(0,0,0) );
 	points_shand.push( new THREE.Vector3(0,0,0) );	
