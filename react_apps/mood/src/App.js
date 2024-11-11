@@ -9,9 +9,21 @@ function App() {
     // js can use document to access the DOM
     const mood = document.querySelector('input').value;
     document.querySelector('input').value = '';
-    const mood_str = mood.toLowerCase();
     console.log(mood)
-    setColor(mood_str);
+    setColor(mood);
+
+    if (mood === "black") {
+	    document.getElementById('input_box').style.setProperty('--placeholder-color', 'white');
+	    document.getElementById('input_box').style.borderBottom = '2px solid white';
+    	    document.getElementById('input_box').style.color = 'white';
+    }
+    
+    if (mood === "white") {
+	    document.getElementById('input_box').style.setProperty('--placeholder-color', 'black');
+	    document.getElementById('input_box').style.borderBottom = '2px solid black';
+	    document.getElementById('input_box').style.color = 'black';
+
+    }
   }
 
   function listenForEnter(e) {

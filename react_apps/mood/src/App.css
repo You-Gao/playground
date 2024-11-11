@@ -40,7 +40,24 @@
 /* transform works relative to the element's own size */
 input {
   position: relative;
+  color: white;
   top: 50%;
-  transform: translateY(-50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-size: 3rem;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  border: none;
+  border-bottom: 1px solid #ffffff;
+  background: transparent;
+}
+
+input::placeholder {
+  color: #ffffff; /* Gray color */
+  font-style: italic;
+  font-weight: normal;
+}
+
+input:focus {
+  outline: none;
 }
