@@ -224,6 +224,10 @@ function App() {
     setIsLoaded(true);
   });
 
+  if (document.readyState === "complete") {
+	  setIsLoaded(true);
+}
+
 	return () => {
 		renderer.dispose()
 	    if (renderer.domElement.parentElement) {
