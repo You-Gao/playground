@@ -7,7 +7,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 function App() {
 	// react sets a hook 
-	var [time, setTime] = useState("00:00:00");
+	var [time, setTime] = useState("");
 
 	function TimeToPoints(radius = 2.5) {
 		const date = new Date();
