@@ -3,6 +3,7 @@ import './App.css';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import * as THREE from 'three';
+import { Timer } from 'three/addons/misc/Timer.js';
 
 function App() {
 	// react sets a hook 
@@ -105,16 +106,25 @@ function App() {
 
 	camera.position.z = 5;
 
-	// uses the native webgl animation rendering to update objects 
+	// uses the native webgl animation rendering to update objects
+  
 	function animate() {
-		const clockVectors = TimeToPoints();
+
     // 0 is second, 1 is minute, 2 is hour
-		geometry_shand.attributes.position.setXYZ(1, clockVectors[0].x, clockVectors[0].y, 0);
+		const clockVectors = TimeToPoints();
+
+    setTimeout( function() {
+
+        requestAnimationFrame( animate );
+
+    }, 1000 / 30 );
+    geometry_shand.attributes.position.setXYZ(1, clockVectors[0].x, clockVectors[0].y, 0);
     geometry.attributes.position.setXYZ(0, clockVectors[1].x, clockVectors[1].y, 0);
     geometry.attributes.position.setXYZ(2, clockVectors[2].x, clockVectors[2].y, 0);
-		geometry.attributes.position.needsUpdate = true;
-		geometry_shand.attributes.position.needsUpdate = true;
-		renderer.render( scene, camera );
+    geometry.attributes.position.needsUpdate = true;
+    geometry_shand.attributes.position.needsUpdate = true;
+    renderer.render( scene, camera );
+
 	}
 	renderer.setAnimationLoop( animate );	
 
