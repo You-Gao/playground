@@ -49,7 +49,7 @@ function App() {
 	inputBox.style.left = '5%';       // Set left to 0%
 	inputBox.style.transform = 'none'; // Reset transform to none
 	inputBox.style.width = '90%';
-	inputBox.style.height = '93%';
+	inputBox.style.height = '95%';
 	inputBox.style.lineHeight = 'normal';
 	
   }
@@ -57,12 +57,12 @@ function App() {
   function handleBoxReset() {
     const inputBox = document.getElementById('input_box');
     console.log("Setting the box back!");
-    inputBox.style.top = '50%';
-    inputBox.style.left = '50%';
-    inputBox.style.transform = 'translate(-50%,-50%)';
-    inputBox.style.width = '';
-    inputBox.style.height = '';
-    inputBox.style.lineHeight = '50%';
+    inputBox.style.top = null;
+    inputBox.style.left = null;
+    inputBox.style.transform = null;
+    inputBox.style.width = null;
+    inputBox.style.height = null;
+    inputBox.style.lineHeight = null;
 
   }
   function listenForEnter(e) {
