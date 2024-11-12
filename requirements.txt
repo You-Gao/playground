@@ -4,5 +4,3 @@ flask-cors
 sendgrid
 gunicorn
 marshmallow
-tensorflow-cpu
-transformers
