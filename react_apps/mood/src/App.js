@@ -7,7 +7,10 @@ function App() {
   const [color, setColor] = useState('black');
   const [hex, setHex] = useState('#000000');
 
-  function getData(url) {
+  function getData(url, input="") {
+    if (input !== "") {
+      url = url + "?text=" + input;
+    }
     return fetch(url).then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -26,7 +29,7 @@ function App() {
     console.log(input);
 
     const url = `http://localhost:5000/mood/api/hex/`;
-    const json = await getData(url);
+    const json = await getData(url, input);
     const hex_string = json['hex'];
     console.log(hex_string);
     setColor(hex_string);
@@ -50,8 +53,8 @@ function App() {
 
   async function changePlaceholderText(input) {
     const inputBox = document.getElementById('input_box');
-    const url = `http://localhost:5000/mood/api/placeholder/`;
-    const json = await getData(url);
+    const url = `http://localhost:5000/mood/api/placeholder`;
+    const json = await getData(url, input);
     const placeholderText = json['placeholder'];
     const placeholderColor = "white";
     inputBox.placeholder = placeholderText;
