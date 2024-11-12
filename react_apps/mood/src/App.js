@@ -1,25 +1,41 @@
 import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from 'react';
+
  
 function App() {
   const [color, setColor] = useState('black');
   const [hex, setHex] = useState('#000000');
 
-  function changeColor() {
+  function getData(url) {
+    return fetch(url).then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    }).then(data => {
+      return data;
+    }).catch(error => {
+      console.error('There has been a problem with your fetch operation:', error);
+    });
+  }
+  
+  async function changeColor(input) {
     // js can use document to access the DOM
-    const mood = document.getElementById('input_box').value;
-    document.getElementById('input_box').value = '';
-    if ((mood === "") || (mood === " ")){ return; }
-    console.log(mood);
-    const hex_string = getRandomHexColor();
+    if ((input === "") || (input === " ")){ return; }
+    console.log(input);
+
+    const url = `http://localhost:5000/mood/api/hex/`;
+    const json = await getData(url);
+    const hex_string = json['hex'];
+    console.log(hex_string);
     setColor(hex_string);
     setHex(hex_string);
 
     if (hex_string === "#000000") {
 	    document.getElementById('input_box').style.setProperty('--placeholder-color', 'white');
 	    document.getElementById('input_box').style.borderBottom = '2px solid white';
-    	    document.getElementById('input_box').style.color = 'white';
+      document.getElementById('input_box').style.color = 'white';
 	    document.getElementById('hex_string').style.color = 'white';
     }
     
@@ -32,25 +48,27 @@ function App() {
     }
   }
 
-  function getRandomHexColor() {
-    // Generate a random number between 0 and 16777215 (0xFFFFFF)
-    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-
-    // Ensure the hex code is always 6 characters (padding with leading zeros if necessary)
-    return "#" + randomColor.padStart(6, '0');
-}
-
+  async function changePlaceholderText(input) {
+    const inputBox = document.getElementById('input_box');
+    const url = `http://localhost:5000/mood/api/placeholder/`;
+    const json = await getData(url);
+    const placeholderText = json['placeholder'];
+    const placeholderColor = "white";
+    inputBox.placeholder = placeholderText;
+    inputBox.style.setProperty('--placeholder-color', placeholderColor);
+  }
 
   function handleThresholdReached() {
     const inputBox = document.getElementById('input_box');
     console.log("Threshold reached!");
-	// Reset styles
-	inputBox.style.top = '0%';        // Set top to 0%
-	inputBox.style.left = '5%';       // Set left to 0%
-	inputBox.style.transform = 'none'; // Reset transform to none
-	inputBox.style.width = '90%';
-	inputBox.style.height = '95%';
-	inputBox.style.lineHeight = 'normal';
+    // Reset styles
+    inputBox.style.top = '15%';        // Set top to 0%
+    inputBox.style.left = '5%';       // Set left to 0%
+    inputBox.style.transform = 'none'; // Reset transform to none
+    inputBox.style.width = '90%';
+    inputBox.style.height = '95%';
+    inputBox.style.lineHeight = 'normal';
+    inputBox.style.border = 'none';
 	
   }
 
@@ -63,29 +81,35 @@ function App() {
     inputBox.style.width = null;
     inputBox.style.height = null;
     inputBox.style.lineHeight = null;
+    inputBox.style.border = null;
 
   }
+
   function listenForEnter(e) {
       if (e.key === 'Enter' && !e.repeat) {
-        changeColor();
-	handleBoxReset();
+        const input = document.getElementById('input_box').value;
+        document.getElementById('input_box').value = '';
+        changeColor(input);
+        changePlaceholderText(input);
+	      handleBoxReset();
     }
-}
+  }
 
-function listenForTreshold() {
-   
-	const inputBox = document.getElementById('input_box');
-	const threshold = 20;
-	document.getElementById('input_box').value = document.getElementById('input_box').value.replace(/[\r\n]+/g, '');
-	const inputLength = inputBox.value.length;
+  function listenForTreshold() {
     
+    const inputBox = document.getElementById('input_box');
+    const threshold = 20;
+    document.getElementById('input_box').value = document.getElementById('input_box').value.replace(/[\r\n]+/g, '');
+    const inputLength = inputBox.value.length;
+      
     // Check if the input length exceeds the threshold
     if (inputLength >= threshold) {
-	handleThresholdReached();
+        handleThresholdReached();
     }
-
-
-}
+    else {
+      handleBoxReset();
+    }
+  }
 
 
   useEffect(() => {

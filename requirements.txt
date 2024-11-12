@@ -1,4 +1,6 @@
 flask-smorest
 flask
+flask-cors
 sendgrid
 gunicorn
+marshmallow
