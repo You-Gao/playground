@@ -38,12 +38,10 @@ function ColorTable({ colors, setColors, prevServerColorsRef }) {
             // the other is if prevServerColors is not empty, then we only add the new colors
             console.log("PrevServerColors:", prevServerColorsRef.current);
             console.log("Length:", prevServerColorsRef.current.length);
-            if ((prevServerColorsRef.current.length === 2) || (prevServerColorsRef.current.length < 3)) {
+            if (prevServerColorsRef.current.length === 2) {
                 const newColors = [];
                 for (let i = 0; i < data.length; i++) {
-                    if ((prevServerColorsRef.current.find(color => color['hex'] === data[i]['hex']) ||
-                    prevServerColorsRef.current.find(color => color['data'] === data[i]['data'])) || 
-                    colors.includes(data[i]['hex']))  {
+                    if (colors.includes(data[i]['hex']))  {
                         continue;
                     }
                     await addNewColorToTable(data[i]['hex']);
