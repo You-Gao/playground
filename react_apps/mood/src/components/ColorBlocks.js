@@ -38,7 +38,7 @@ function ColorTable({ colors, setColors, prevServerColorsRef }) {
             // the other is if prevServerColors is not empty, then we only add the new colors
             console.log("PrevServerColors:", prevServerColorsRef.current);
             console.log("Length:", prevServerColorsRef.current.length);
-            if ((prevServerColorsRef.current.length === 0) || (prevServerColorsRef.current.length < 3)) {
+            if ((prevServerColorsRef.current.length === 2) || (prevServerColorsRef.current.length < 3)) {
                 const newColors = [];
                 for (let i = 0; i < data.length; i++) {
                     if ((prevServerColorsRef.current.find(color => color['hex'] === data[i]['hex']) ||
@@ -128,7 +128,7 @@ function ColorTable({ colors, setColors, prevServerColorsRef }) {
     useEffect(() => {
         const interval = setInterval(() => {
             updateColorsFromServer();
-        }, 10000);
+        }, 5000);
 
         return () => clearInterval(interval);
     }, [prevServerColors]);
