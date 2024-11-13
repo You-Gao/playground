@@ -132,13 +132,7 @@ function ColorTable({ colors, setColors, prevServerColorsRef }) {
     }, [prevServerColors]);
 
     useEffect(() => {
-        window.addEventListener('keydown', (e) => {
-            // check if there is input in the box and enter is hit
-            const inputBox = document.getElementById('input_box');
-            if (inputBox.value.length > 0 && e.key === 'Enter') {
-                updateColorsFromServer();
-            }
-        });
+        updateColorsFromServer();
     }, []);
 
     return (
