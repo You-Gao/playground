@@ -1,10 +1,9 @@
 import './TextArea.css';
 import { useState, useEffect } from 'react';
 
-function TextArea({colors, setColors}) {
-
-    const [color, setColor] = useState('black');
-    const [hex, setHex] = useState('#000000');
+function TextArea({colors, setColors}) {    
+    const [color, setColor] = useState('');
+    const [hex, setHex] = useState('');
 
     function getData(url, input="") {
         if (input !== "") {
@@ -103,6 +102,15 @@ function TextArea({colors, setColors}) {
         screenDiv.style.bottom = '0';
         }
 
+      function initColor() {
+        const url = `http://localhost:5000/mood/api/hex/`;
+        getData(url).then(data => {
+          const hex_string = data['hex'];
+          setColor(hex_string);
+          setHex(hex_string);
+        });
+      }
+
       function listenForEnter(e) {
           if (e.key === 'Enter' && !e.repeat) {
             const input = document.getElementById('input_box').value;
@@ -137,6 +145,7 @@ function TextArea({colors, setColors}) {
       
       
       useEffect(() => {
+        initColor();
         // listen to an enter key press in the input field
         window.addEventListener('keydown', listenForEnter);
       
@@ -155,7 +164,7 @@ function TextArea({colors, setColors}) {
 
         return (
             <div className="TextAreaApp" id="textapp" style={{"background": color}}>
-                <textarea id="input_box" type="text" placeholder="how you feeling?" />
+                <textarea id="input_box" type="text" placeholder="leave a color" />
                 <h1 id="hex_string">{hex}</h1>
             </div>
         );
