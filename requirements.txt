@@ -4,3 +4,4 @@ flask-cors
 sendgrid
 gunicorn
 marshmallow
+numpy
