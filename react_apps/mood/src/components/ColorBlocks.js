@@ -1,15 +1,8 @@
 import './ColorBlocks.css';
 import { useState, useEffect, useLayoutEffect, useRef } from 'react';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 
-function ColorBlocks({colors, setColors, prevServerColorsRef}) {
+function ColorBlocks({colors, setColors, prevServerColorsRef, colorsRef}) {
 
-
-
-    useEffect(() => {
-      }, [colors]); // Runs whenever 'colors' changes
-      
     return (
         <div className="color-blocks">
             <ColorTable colors={colors} setColors={setColors} prevServerColorsRef={prevServerColorsRef}/>
@@ -19,7 +12,7 @@ function ColorBlocks({colors, setColors, prevServerColorsRef}) {
 
 export default ColorBlocks;
 
-function ColorTable({ colors, setColors, prevServerColorsRef }) {
+function ColorTable({ colors, setColors, prevServerColorsRef, colorsRef}) {
     const [col, setCol] = useState(0);
     const [row, setRow] = useState(0);
     const [prevServerColors, setPrevServerColors] = useState([]);
@@ -41,10 +34,10 @@ function ColorTable({ colors, setColors, prevServerColorsRef }) {
             if (prevServerColorsRef.current.length === 2) {
                 const newColors = [];
                 for (let i = 0; i < data.length; i++) {
-                    if (colors.includes(data[i]['hex']))  {
+                    if (colorsRef.current.includes(data[i]['hex']))  {
                         continue;
                     }
-                    await addNewColorToTable(data[i]['hex']);
+                    addNewColorToTable(data[i]['hex']);
                     newColors.push(data[i]);
                 }
                 setPrevServerColors(newColors);
@@ -57,7 +50,7 @@ function ColorTable({ colors, setColors, prevServerColorsRef }) {
                     try {
                         if ((prevServerColorsRef.current.find(color => color['hex'] === data[i]['hex']) &&
                         prevServerColorsRef.current.find(color => color['data'] === data[i]['data'])) || 
-                        colors.includes(data[i]['hex'])) {
+                        colorsRef.current.includes(data[i]['hex'])) {
                             console.log("Color already exists in colors or prevServerColors");
                             continue;
                         }
@@ -65,7 +58,7 @@ function ColorTable({ colors, setColors, prevServerColorsRef }) {
                         console.error('Error comparing colors:', error);
                         console.error('Still adding new color to table:', data[i]['hex'], data[i]);
                     }
-                    await addNewColorToTable(data[i]['hex']);
+                    addNewColorToTable(data[i]['hex']);
                     newColors.push(data[i]);
                 }
                 setPrevServerColors(newColors);
@@ -77,9 +70,11 @@ function ColorTable({ colors, setColors, prevServerColorsRef }) {
     }
 
 
-    function animateHorizontalScroll() {
+    async function animateHorizontalScroll() {
         /*  gsap can't be used because it doesn't support horizontal scrolling (only vertical *horizontal* scrolling) */
         /*  So, we use the native scrollIntoView method */
+        // wait for the animation to finish
+        await new Promise(r => setTimeout(r, 1000));
         const table = document.getElementById("blocks");
         const tableContainer = document.getElementById("tablecontainer");
         const lastCol = document.getElementById(col);
@@ -109,6 +104,12 @@ function ColorTable({ colors, setColors, prevServerColorsRef }) {
 
         setRow(rowRef.current);
         setCol(colRef.current);
+
+        // animate the row by setting width to 0 then to 250px
+        tr.style.width = "0px";
+
+        await new Promise(r => setTimeout(r, 500));
+        tr.style.width = "250px";
         return 1;
 
     }

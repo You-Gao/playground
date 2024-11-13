@@ -9,6 +9,8 @@ function App() {
 
   const [colors, setColors] = useState([]);
   const prevServerColorsRef = useRef([]);
+  const colorsRef = useRef(colors);
+
   useEffect(() => {
     console.log("Updated colors:", colors);
   }, [colors]); // Runs whenever 'colors' changes
@@ -16,8 +18,8 @@ function App() {
   return (
     /* return the component TextArea */
     <div className="App">
-      <TextArea colors={colors} setColors={setColors} prevServerColorsRef={prevServerColorsRef} />
-      <ColorBlocks colors={colors} setColors={setColors} prevServerColorsRef={prevServerColorsRef} />
+      <TextArea colors={colors} setColors={setColors} prevServerColorsRef={prevServerColorsRef} colorsRef={colorsRef} />
+      <ColorBlocks colors={colors} setColors={setColors} prevServerColorsRef={prevServerColorsRef} colorsRef={colorsRef} />
     </div>
   );
 }

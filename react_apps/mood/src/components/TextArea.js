@@ -1,7 +1,7 @@
 import './TextArea.css';
 import { useState, useEffect } from 'react';
 
-function TextArea({colors, setColors, prevServerColorsRef}) {    
+function TextArea({colors, setColors, colorsRef, prevServerColorsRef}) {    
     const [color, setColor] = useState('');
     const [hex, setHex] = useState('');
 
@@ -30,7 +30,8 @@ function TextArea({colors, setColors, prevServerColorsRef}) {
         const hex_string = json['hex'];
 
 
-        setColors((prevColors) => [...prevColors, hex_string]);
+        colorsRef.current = [...colorsRef.current, hex_string];
+        setColors([...colors, hex_string]);
         const hex_dict = {hex: hex_string, data: input};
         prevServerColorsRef.current = [...prevServerColorsRef.current, hex_dict];
         setColor(hex_string);
@@ -111,7 +112,8 @@ function TextArea({colors, setColors, prevServerColorsRef}) {
           setColor(hex_string);
           setHex(hex_string);
           prevServerColorsRef.current = [...prevServerColorsRef.current, hex_string];
-          setColors((prevColors) => [...prevColors, hex_string]);
+          colorsRef.current = [...colorsRef.current, hex_string];
+          setColors([...colors, hex_string]);
 
         });
       }

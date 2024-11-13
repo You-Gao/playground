@@ -39,4 +39,9 @@
     padding: 2%;
     margin: 10px;
     border: none;
+    transition: width 0.5s ease-out;
+  }
+
+  tr:hover {
+    transform: scale(1.05);
   }
