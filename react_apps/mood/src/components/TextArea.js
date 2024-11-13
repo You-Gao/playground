@@ -25,7 +25,7 @@ function TextArea({colors, setColors, prevServerColorsRef}) {
         // js can use document to access the DOM
         if ((input === "") || (input === " ")){ return; }
       
-        const url = `http://localhost:5000/mood/api/hex/`;
+        const url = `https://playground.yougao.dev/mood/api/hex/`;
         const json = await getData(url, input);
         const hex_string = json['hex'];
 
@@ -55,7 +55,7 @@ function TextArea({colors, setColors, prevServerColorsRef}) {
       async function changePlaceholderText(input) {
         const inputBox = document.getElementById('input_box');
         if ((input === "") || (input === " ")){ return; }
-        const url = `http://localhost:5000/mood/api/placeholder`;
+        const url = `https://playground.yougao.dev/mood/api/placeholder/`;
         const json = await getData(url, input);
         const placeholderText = json['placeholder'];
         const placeholderColor = "white";
@@ -105,7 +105,7 @@ function TextArea({colors, setColors, prevServerColorsRef}) {
         }
 
       function initColor() {
-        const url = `http://localhost:5000/mood/api/hex/`;
+        const url = `https://playground.yougao.dev/mood/api/hex/`;
         getData(url).then(data => {
           const hex_string = data['hex'];
           setColor(hex_string);

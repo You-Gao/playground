@@ -27,7 +27,7 @@ function ColorTable({ colors, setColors, prevServerColorsRef }) {
     const colRef = useRef(0);
 
     function updateColorsFromServer() {
-        const url = `http://localhost:5000/mood/api/colors/`;
+        const url = `https://playground.yougao.dev/mood/api/colors/`;
         fetch(url).then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
