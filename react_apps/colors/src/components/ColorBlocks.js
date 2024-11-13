@@ -5,7 +5,7 @@ function ColorBlocks({colors, setColors, prevServerColorsRef, colorsRef}) {
 
     return (
         <div className="color-blocks">
-            <ColorTable colors={colors} setColors={setColors} prevServerColorsRef={prevServerColorsRef}/>
+            <ColorTable colors={colors} setColors={setColors} prevServerColorsRef={prevServerColorsRef} colorsRef={colorsRef}/>
         </div>
     );
 }
@@ -57,6 +57,9 @@ function ColorTable({ colors, setColors, prevServerColorsRef, colorsRef}) {
                     } catch (error) {
                         console.error('Error comparing colors:', error);
                         console.error('Still adding new color to table:', data[i]['hex'], data[i]);
+                    }
+                    if (colorsRef.current.includes(data[i]['hex']))  {
+                        continue;
                     }
                     addNewColorToTable(data[i]['hex']);
                     newColors.push(data[i]);

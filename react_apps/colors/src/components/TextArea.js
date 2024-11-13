@@ -109,9 +109,10 @@ function TextArea({colors, setColors, colorsRef, prevServerColorsRef}) {
         const url = `https://playground.yougao.dev/mood/api/hex/`;
         getData(url).then(data => {
           const hex_string = data['hex'];
+          const hex_dict = {hex: hex_string, data: ""};
           setColor(hex_string);
           setHex(hex_string);
-          prevServerColorsRef.current = [...prevServerColorsRef.current, hex_string];
+          prevServerColorsRef.current = [...prevServerColorsRef.current, hex_dict];
           colorsRef.current = [...colorsRef.current, hex_string];
           setColors([...colors, hex_string]);
 

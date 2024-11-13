@@ -9,7 +9,7 @@ function App() {
 
   const [colors, setColors] = useState([]);
   const prevServerColorsRef = useRef([]);
-  const colorsRef = useRef(colors);
+  const colorsRef = useRef([]);
 
   useEffect(() => {
     console.log("Updated colors:", colors);

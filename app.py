@@ -3,7 +3,7 @@ from flask_smorest import Api
 from flask_cors import CORS
 
 from blueprints.serve_react import bp as react_bp
-from blueprints.mood_bp import bp as mood_bp
+from blueprints.colors_bp import bp as colors_bp
 
 
 app = Flask(__name__)
@@ -22,7 +22,7 @@ app.config["OPENAPI_REDOC_URL"] = "https://cdn.jsdelivr.net/npm/redoc@next/bundl
 
 api = Api(app)
 api.register_blueprint(react_bp)
-api.register_blueprint(mood_bp)
+api.register_blueprint(colors_bp)
 
 CORS(app)
 
