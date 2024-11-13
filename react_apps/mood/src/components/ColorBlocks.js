@@ -48,7 +48,7 @@ function ColorTable({ colors, setColors, prevServerColorsRef }) {
                     newColors.push(data[i]);
                 }
                 setPrevServerColors(newColors);
-                prevServerColorsRef.current = newColors;
+                prevServerColorsRef.current = [...prevServerColorsRef.current, ...newColors];
             }
             else {
                 console.log("ELSE BLOCK");
