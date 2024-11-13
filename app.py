@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 # allow all cors
 app.config['CORS_HEADERS'] = 'Content-Type'
-app.config['CORS_RESOURCES'] = {r"/mood/api/*": {"origins": "*"}}
+app.config['CORS_RESOURCES'] = {r"/mood/api/*": {"origins": ["http://playground.yougao.dev", "http://localhost:3000"]}}
 app.config["API_TITLE"] = "My API"
 app.config["API_VERSION"] = "v1"
 app.config["OPENAPI_VERSION"] = "3.0.2"
