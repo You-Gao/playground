@@ -1,9 +1,9 @@
 import './ColorBlocks.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
-function ColorBlocks({colors}) {
+function ColorBlocks({colors, setColors, prevServerColorsRef}) {
 
 
 
@@ -12,16 +12,72 @@ function ColorBlocks({colors}) {
       
     return (
         <div className="color-blocks">
-            <ColorTable colors={colors} />
+            <ColorTable colors={colors} setColors={setColors} prevServerColorsRef={prevServerColorsRef}/>
         </div>
     );
 }
 
 export default ColorBlocks;
 
-function ColorTable({ colors }) {
+function ColorTable({ colors, setColors, prevServerColorsRef }) {
     const [col, setCol] = useState(0);
     const [row, setRow] = useState(0);
+    const [prevServerColors, setPrevServerColors] = useState([]);
+    const rowRef = useRef(0);
+    const colRef = useRef(0);
+
+    function updateColorsFromServer() {
+        const url = `http://localhost:5000/mood/api/colors/`;
+        fetch(url).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }).then(async data => {
+            // theres 2 logics here, one is just setting if prevServerColors is empty
+            // the other is if prevServerColors is not empty, then we only add the new colors
+            console.log("PrevServerColors:", prevServerColorsRef.current);
+            console.log("Length:", prevServerColorsRef.current.length);
+            if ((prevServerColorsRef.current.length === 0) || (prevServerColorsRef.current.length < 3)) {
+                const newColors = [];
+                for (let i = 0; i < data.length; i++) {
+                    if ((prevServerColorsRef.current.find(color => color['hex'] === data[i]['hex']) ||
+                    prevServerColorsRef.current.find(color => color['data'] === data[i]['data'])) || 
+                    colors.includes(data[i]['hex']))  {
+                        continue;
+                    }
+                    await addNewColorToTable(data[i]['hex']);
+                    newColors.push(data[i]);
+                }
+                setPrevServerColors(newColors);
+                prevServerColorsRef.current = newColors;
+            }
+            else {
+                console.log("ELSE BLOCK");
+                const newColors = [];
+                for (let i = 0; i < data.length; i++) {
+                    try {
+                        if ((prevServerColorsRef.current.find(color => color['hex'] === data[i]['hex']) &&
+                        prevServerColorsRef.current.find(color => color['data'] === data[i]['data'])) || 
+                        colors.includes(data[i]['hex'])) {
+                            console.log("Color already exists in colors or prevServerColors");
+                            continue;
+                        }
+                    } catch (error) {
+                        console.error('Error comparing colors:', error);
+                        console.error('Still adding new color to table:', data[i]['hex'], data[i]);
+                    }
+                    await addNewColorToTable(data[i]['hex']);
+                    newColors.push(data[i]);
+                }
+                setPrevServerColors(newColors);
+                prevServerColorsRef.current = [...prevServerColorsRef.current, ...newColors];
+            }
+        }).catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+    }
+
 
     function animateHorizontalScroll() {
         /*  gsap can't be used because it doesn't support horizontal scrolling (only vertical *horizontal* scrolling) */
@@ -32,67 +88,60 @@ function ColorTable({ colors }) {
         lastCol.scrollIntoView({ behavior: "smooth", block: "end", inline: "end" });
       }
 
-    function addNewColorToTable(hex) {
+      async function addNewColorToTable(hex) {
         const table = document.getElementById("blocks");
 
-        if ((col === 0) && (row === 3)) {
-            // add row to table
-            const cell = document.getElementById(col);
-
-            // add TR to the cell
-            const tr = document.createElement("tr");
-            tr.style.backgroundColor = hex;
-            cell.appendChild(tr);
-            setRow(prev => 0);
-
+        if (rowRef.current  === 4) {
+            rowRef.current = 0;
+            colRef.current = colRef.current + 1;
             const newCol = document.createElement("td");
-            newCol.id = col+1;
-            table.appendChild(newCol);
-            setCol(prev => prev + 1);
-
-            return;
-        }
-
-        if (row === 4) {
-            setRow(prev => 0);
-            setCol(prev => prev + 1);
-            const newCol = document.createElement("td");
-            newCol.id = col+1;
+            newCol.id = colRef.current;
             table.appendChild(newCol);
         }
 
         // add row to table
-        const cell = document.getElementById(col);
+        const cell = document.getElementById(colRef.current);
 
         // add TR to the cell
         const tr = document.createElement("tr");
         tr.style.backgroundColor = hex;
         cell.appendChild(tr);
 
+        rowRef.current = rowRef.current + 1;
+
+        setRow(rowRef.current);
+        setCol(colRef.current);
+        return 1;
+
     }
-    useEffect(() => {
+
+    useLayoutEffect(() => {
         if (colors.length > 0) {
             addNewColorToTable(colors[colors.length - 1]);
-            setRow(prev => prev + 1);
-        }
-
-        // Call this function when the table gets filled
-        document.addEventListener('DOMContentLoaded', () => {
-            // Assuming you have a way to detect when the table is filled
-            // For example, you can call this function after populating the table
-            animateHorizontalScroll();
-        });
-
-        return () => {
-            document.removeEventListener('DOMContentLoaded', () => {
-                animateHorizontalScroll();
-            });
         }
     }, [colors]);
 
     useEffect(() => {
         animateHorizontalScroll();
     }, [col, row]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            updateColorsFromServer();
+        }, 10000);
+
+        return () => clearInterval(interval);
+    }, [prevServerColors]);
+
+    useEffect(() => {
+        window.addEventListener('keydown', (e) => {
+            // check if there is input in the box and enter is hit
+            const inputBox = document.getElementById('input_box');
+            if (inputBox.value.length > 0 && e.key === 'Enter') {
+                updateColorsFromServer();
+            }
+        });
+    }, []);
 
     return (
     <div className="table_container" id="tablecontainer">

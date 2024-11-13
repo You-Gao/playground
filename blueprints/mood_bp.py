@@ -14,6 +14,8 @@ bp = Blueprint('mood', 'mood', url_prefix='/mood/api/', description='Forwarding 
 log = log.getLogger(__name__)
 react_build_path = os.path.join(os.getcwd(), "react_apps")
 
+# global colors array to be used in the app
+colors = []
 
 @bp.route('/')
 class ReactView(MethodView):
@@ -30,7 +32,9 @@ class Hex(MethodView):
         # random num from #000000 to #FFFFFF
         num = math.floor(random.randrange(0, 16777215))
         text = request.args.get('text')
-        response = json.dumps({'hex': f'#{num:06X}', 'text': text})
+        response_dict = {'hex': f'#{num:06X}', 'text': text}
+        response = json.dumps(response_dict)
+        colors.append(response_dict)
         return make_response(response, 200, {'Content-Type': 'application/json'})
  
 @bp.route('/placeholder/')
@@ -42,6 +46,11 @@ class Placeholder(MethodView):
         response = random.choice(response)
         response = json.dumps({'placeholder': response["text"]})
         return make_response(response, 200, {'Content-Type': 'application/json'})
+
+@bp.route('/colors/')
+class Colors(MethodView):
+    def get(self):
+        return make_response(json.dumps(colors), 200, {'Content-Type': 'application/json'})
 
 @bp.route('/<string:app>/static/<string:type>/<string:file>')
 class StaticView(MethodView):

@@ -1,7 +1,7 @@
 import './TextArea.css';
 import { useState, useEffect } from 'react';
 
-function TextArea({colors, setColors}) {    
+function TextArea({colors, setColors, prevServerColorsRef}) {    
     const [color, setColor] = useState('');
     const [hex, setHex] = useState('');
 
@@ -31,6 +31,8 @@ function TextArea({colors, setColors}) {
 
 
         setColors((prevColors) => [...prevColors, hex_string]);
+        const hex_dict = {hex: hex_string, data: input};
+        prevServerColorsRef.current = [...prevServerColorsRef.current, hex_dict];
         setColor(hex_string);
         setHex(hex_string);
       
@@ -108,6 +110,9 @@ function TextArea({colors, setColors}) {
           const hex_string = data['hex'];
           setColor(hex_string);
           setHex(hex_string);
+          prevServerColorsRef.current = [...prevServerColorsRef.current, hex_string];
+          setColors((prevColors) => [...prevColors, hex_string]);
+
         });
       }
 
@@ -164,7 +169,7 @@ function TextArea({colors, setColors}) {
 
         return (
             <div className="TextAreaApp" id="textapp" style={{"background": color}}>
-                <textarea id="input_box" type="text" placeholder="leave a color" />
+                <textarea id="input_box" type="text" placeholder="[...]" />
                 <h1 id="hex_string">{hex}</h1>
             </div>
         );
