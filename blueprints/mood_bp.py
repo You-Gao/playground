@@ -5,7 +5,6 @@ from flask.views import MethodView
 import os
 import logging as log
 import random, math, json
-from transformers import pipeline
 import numpy as np
 
 from schemas.mood_schemas import HexSchema, PlaceholderSchema
@@ -15,7 +14,6 @@ bp = Blueprint('mood', 'mood', url_prefix='/mood/api/', description='Forwarding 
 log = log.getLogger(__name__)
 react_build_path = os.path.join(os.getcwd(), "react_apps")
 
-classifier = pipeline("text-classification",model='bhadresh-savani/bert-base-uncased-emotion', return_all_scores=True)
 
 @bp.route('/')
 class ReactView(MethodView):
@@ -30,44 +28,11 @@ class Hex(MethodView):
     @bp.response(200, HexSchema)
     def get(self):
         # random num from #000000 to #FFFFFF
-        # num = math.floor(random.randrange(0, 16777215))
+        num = math.floor(random.randrange(0, 16777215))
         text = request.args.get('text')
-        response = json.dumps({'hex': f'{get_emotion_hex(text)}'})
+        response = json.dumps({'hex': f'#{num:06X}', 'text': text})
         return make_response(response, 200, {'Content-Type': 'application/json'})
-    
-def get_emotion_hex(text):
-    prediction = classifier(text)
-    print(prediction[0])
-    emotion_colors = {
-        'sadness': (0, 0, 255),  # Blue
-        'joy': (255, 255, 0),    # Yellow
-        'love': (255, 0, 255),   # Magenta
-        'anger': (255, 0, 0),    # Red
-        'fear': (128, 0, 128),   # Purple
-        'surprise': (0, 255, 255) # Cyan
-    }
-    
-    rgbs = []
-    weights = []
-    for i, diction in enumerate(prediction[0]):
-        label = diction['label']
-        score = diction['score']
-        rgb = emotion_colors[label]
-        rgb = tuple([int(x * score) for x in rgb])
-        rgbs.append(rgb)
-        weights.append(score)
-
-    mean_rgb = [0, 0, 0]
-    for i in range(3):
-        val = []
-        for rgb in rgbs:
-            val.append(rgb[i])
-        mean_rgb[i] = np.average(val, weights=weights)
-        
-    emotion = f'#{int(mean_rgb[0]):02x}{int(mean_rgb[1]):02x}{int(mean_rgb[2]):02x}'
-    print(emotion)
-    return emotion
-    
+ 
 @bp.route('/placeholder/')
 class Placeholder(MethodView):
     @bp.response(200, PlaceholderSchema)
