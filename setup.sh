@@ -5,8 +5,8 @@ cd react_apps/clock
 npm install
 npm run build
 
-echo "Building React Mood App..."
-cd ../mood
+echo "Building React Colors App..."
+cd ../colors
 npm install
 npm run build
 
