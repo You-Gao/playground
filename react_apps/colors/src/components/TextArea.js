@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function TextArea({colors, setColors, colorsRef, prevServerColorsRef}) {    
     const [color, setColor] = useState('');
-    const [hex, setHex] = useState('');
+    const [hex, setHex] = useState('#FFFFFF');
 
     function getData(url, input="") {
         if (input !== "") {
@@ -88,6 +88,9 @@ handleScreenReset(): resets the 1st screen when typing another input
         inputBox.style.height = '95%';
         inputBox.style.lineHeight = 'normal';
         inputBox.style.border = 'none';
+
+	const QOTD = document.getElementById('QOTD');
+	QOTD.style.visibility = 'hidden';
         
       }
       
@@ -109,6 +112,9 @@ handleScreenReset(): resets the 1st screen when typing another input
         screenDiv.style.width = '100%';
         screenDiv.style.height = '20%';
         screenDiv.style.bottom = '0';
+      
+	const QOTD = document.getElementById('QOTD');
+	QOTD.style.visibility = 'hidden';
       }
 
       function handleScreenReset() {
@@ -116,11 +122,14 @@ handleScreenReset(): resets the 1st screen when typing another input
         screenDiv.style.width = null;
         screenDiv.style.height = '100%';
         screenDiv.style.bottom = '0';
-        }
+      
+	const QOTD = document.getElementById('QOTD');
+	QOTD.style.visibility = '';  
+      }
 
 /*
 i think the initcolor can be removed
-*/
+
       function initColor() {
         const url = `https://playground.yougao.dev/mood/api/hex/`;
         getData(url).then(data => {
@@ -134,6 +143,7 @@ i think the initcolor can be removed
 
         });
       }
+*/
 
 /*
 LISTEN FUNCTIONS:
@@ -172,8 +182,15 @@ listenForThreshold(): listen for text amnt to dispatch screen changes
       
       // uses the functions above to set-up the first screen
       useEffect(() => {
-        initColor();
-        window.addEventListener('keydown', listenForEnter);
+        // initColor();
+	// ! ADHOC FIX
+	setColor("#ffffff");
+        document.getElementById('input_box').style.setProperty('--placeholder-color', 'black');
+        document.getElementById('input_box').style.borderBottom = '2px solid black';
+        document.getElementById('input_box').style.color = 'black';
+        document.getElementById('hex_string').style.color = 'black';
+
+	window.addEventListener('keydown', listenForEnter);
         const inputBox = document.getElementById('input_box');
       
         inputBox.addEventListener('input', listenForTreshold);
@@ -187,6 +204,7 @@ listenForThreshold(): listen for text amnt to dispatch screen changes
 
         return (
             <div className="TextAreaApp" id="textapp" style={{"background": color}}>
+		<div className="QOTD" id="QOTD">QOTD: Where do you go at 34:ten AM?</div> 
 	    	<div className="TestLink"><Link to="/plan">Test</Link></div>
 		<textarea id="input_box" type="text" placeholder="[...]" />
                 <h1 id="hex_string">{hex}</h1>
