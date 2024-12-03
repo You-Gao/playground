@@ -1,5 +1,6 @@
 import './TextArea.css';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 function TextArea({colors, setColors, colorsRef, prevServerColorsRef}) {    
     const [color, setColor] = useState('');
@@ -20,7 +21,12 @@ function TextArea({colors, setColors, colorsRef, prevServerColorsRef}) {
           console.error('There has been a problem with your fetch operation:', error);
         });
       }
-      
+
+/*
+CHANGE FUNCTIONS:
+changeColor(): updates the screen colors
+changePlaceholderText(): updates the input_box with text 
+*/
       async function changeColor(input) {
         // js can use document to access the DOM
         if ((input === "") || (input === " ")){ return; }
@@ -63,14 +69,21 @@ function TextArea({colors, setColors, colorsRef, prevServerColorsRef}) {
         inputBox.placeholder = placeholderText;
         inputBox.style.setProperty('--placeholder-color', placeholderColor);
       }
-      
+
+/*
+HANDLE FUNCTIONS:
+handleTreshholdReached(): sets the input_box to "fullscreen"
+handleBoxReset(): resets the input_box 
+handleScreenShrink(): "moves" the 1st screen down to show wall
+handleScreenReset(): resets the 1st screen when typing another input
+*/
+
       function handleThresholdReached() {
         const inputBox = document.getElementById('input_box');
         console.log("Threshold reached!");
-        // Reset styles
-        inputBox.style.top = '15%';        // Set top to 0%
-        inputBox.style.left = '5%';       // Set left to 0%
-        inputBox.style.transform = 'none'; // Reset transform to none
+        inputBox.style.top = '15%';
+	inputBox.style.left = '5%';
+	inputBox.style.transform = 'none'; 
         inputBox.style.width = '90%';
         inputBox.style.height = '95%';
         inputBox.style.lineHeight = 'normal';
@@ -105,6 +118,9 @@ function TextArea({colors, setColors, colorsRef, prevServerColorsRef}) {
         screenDiv.style.bottom = '0';
         }
 
+/*
+i think the initcolor can be removed
+*/
       function initColor() {
         const url = `https://playground.yougao.dev/mood/api/hex/`;
         getData(url).then(data => {
@@ -119,10 +135,16 @@ function TextArea({colors, setColors, colorsRef, prevServerColorsRef}) {
         });
       }
 
+/*
+LISTEN FUNCTIONS:
+listenForEnter(): listen for enter and then dispatches changeColor() and changePlaceholderText()
+listenForThreshold(): listen for text amnt to dispatch screen changes
+*/
       function listenForEnter(e) {
           if (e.key === 'Enter' && !e.repeat) {
             const input = document.getElementById('input_box').value;
             document.getElementById('input_box').value = '';
+	    // the input coupling is really bad
             changeColor(input);
             changePlaceholderText(input);
             handleBoxReset();
@@ -130,14 +152,12 @@ function TextArea({colors, setColors, colorsRef, prevServerColorsRef}) {
         }
       }
       
-      function listenForTreshold() {
-        
+      function listenForTreshold() { 
         const inputBox = document.getElementById('input_box');
         const threshold = 20;
         document.getElementById('input_box').value = document.getElementById('input_box').value.replace(/[\r\n]+/g, '');
         const inputLength = inputBox.value.length;
           
-        // Check if the input length exceeds the threshold
         if (inputLength >= threshold) {
             handleThresholdReached();
         }
@@ -145,24 +165,19 @@ function TextArea({colors, setColors, colorsRef, prevServerColorsRef}) {
           handleBoxReset();
         }
 
-        // Check if the input length is 5 to change the screen size
         if (inputLength === 5) {
           handleScreenReset();
         }
       }
       
-      
+      // uses the functions above to set-up the first screen
       useEffect(() => {
         initColor();
-        // listen to an enter key press in the input field
         window.addEventListener('keydown', listenForEnter);
-      
-        // listen to inputs into to input field
         const inputBox = document.getElementById('input_box');
       
         inputBox.addEventListener('input', listenForTreshold);
       
-        // clean up
         return () => {
           window.removeEventListener('keydown', listenForEnter);
           window.removeEventListener('input', listenForTreshold); 
@@ -172,7 +187,8 @@ function TextArea({colors, setColors, colorsRef, prevServerColorsRef}) {
 
         return (
             <div className="TextAreaApp" id="textapp" style={{"background": color}}>
-                <textarea id="input_box" type="text" placeholder="[...]" />
+	    	<div className="TestLink"><Link to="/plan">Test</Link></div>
+		<textarea id="input_box" type="text" placeholder="[...]" />
                 <h1 id="hex_string">{hex}</h1>
             </div>
         );

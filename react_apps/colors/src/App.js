@@ -1,9 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
 import  { useState, useEffect, useRef } from 'react';
-
+import {Route, Routes } from 'react-router-dom';
 import TextArea from './components/TextArea';
 import ColorBlocks from './components/ColorBlocks';
+import Plan from './components/Plan';
 
 function App() {
 
@@ -13,14 +14,30 @@ function App() {
 
   useEffect(() => {
     console.log("Updated colors:", colors);
-  }, [colors]); // Runs whenever 'colors' changes
-
+  }, [colors]); 
   return (
-    /* return the component TextArea */
-    <div className="App">
-      <TextArea colors={colors} setColors={setColors} prevServerColorsRef={prevServerColorsRef} colorsRef={colorsRef} />
-      <ColorBlocks colors={colors} setColors={setColors} prevServerColorsRef={prevServerColorsRef} colorsRef={colorsRef} />
-    </div>
+	  <Routes>
+  <Route 
+    path="/" 
+    element={
+      <>
+        <TextArea 
+          colors={colors} 
+          setColors={setColors} 
+          prevServerColorsRef={prevServerColorsRef} 
+          colorsRef={colorsRef} 
+        />
+        <ColorBlocks 
+          colors={colors} 
+          setColors={setColors} 
+          prevServerColorsRef={prevServerColorsRef} 
+          colorsRef={colorsRef} 
+        />
+      </>
+    } 
+  />
+  <Route path="/plan" element={<Plan />} />
+</Routes>
   );
 }
 

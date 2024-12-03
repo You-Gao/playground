@@ -37,7 +37,7 @@ function ColorTable({ colors, setColors, prevServerColorsRef, colorsRef}) {
                     if (colorsRef.current.includes(data[i]['hex']))  {
                         continue;
                     }
-                    addNewColorToTable(data[i]['hex']);
+                    addNewColorToTable(data[i]['hex'], data[i]['text']);
                     newColors.push(data[i]);
                 }
                 setPrevServerColors(newColors);
@@ -49,19 +49,18 @@ function ColorTable({ colors, setColors, prevServerColorsRef, colorsRef}) {
                 for (let i = 0; i < data.length; i++) {
                     try {
                         if ((prevServerColorsRef.current.find(color => color['hex'] === data[i]['hex']) &&
-                        prevServerColorsRef.current.find(color => color['data'] === data[i]['data'])) || 
+                        prevServerColorsRef.current.find(color => color['text'] === data[i]['text'])) || 
                         colorsRef.current.includes(data[i]['hex'])) {
                             console.log("Color already exists in colors or prevServerColors");
                             continue;
                         }
                     } catch (error) {
                         console.error('Error comparing colors:', error);
-                        console.error('Still adding new color to table:', data[i]['hex'], data[i]);
                     }
                     if (colorsRef.current.includes(data[i]['hex']))  {
                         continue;
                     }
-                    addNewColorToTable(data[i]['hex']);
+                    addNewColorToTable(data[i]['hex'], data[i]['text']);
                     newColors.push(data[i]);
                 }
                 setPrevServerColors(newColors);
@@ -75,16 +74,12 @@ function ColorTable({ colors, setColors, prevServerColorsRef, colorsRef}) {
 
     async function animateHorizontalScroll() {
         /*  gsap can't be used because it doesn't support horizontal scrolling (only vertical *horizontal* scrolling) */
-        /*  So, we use the native scrollIntoView method */
-        // wait for the animation to finish
         await new Promise(r => setTimeout(r, 1000));
-        const table = document.getElementById("blocks");
-        const tableContainer = document.getElementById("tablecontainer");
         const lastCol = document.getElementById(col);
         lastCol.scrollIntoView({ behavior: "smooth", block: "end", inline: "end" });
       }
 
-      async function addNewColorToTable(hex) {
+      async function addNewColorToTable(hex, msg) {
         const table = document.getElementById("blocks");
 
         if (rowRef.current  === 4) {
@@ -95,27 +90,75 @@ function ColorTable({ colors, setColors, prevServerColorsRef, colorsRef}) {
             table.appendChild(newCol);
         }
 
-        // add row to table
         const cell = document.getElementById(colRef.current);
-
-        // add TR to the cell
         const tr = document.createElement("tr");
         tr.style.backgroundColor = hex;
-        cell.appendChild(tr);
+	tr.setAttribute("data-info", msg); 
+	cell.appendChild(tr);
 
         rowRef.current = rowRef.current + 1;
-
         setRow(rowRef.current);
         setCol(colRef.current);
 
-        // animate the row by setting width to 0 then to 250px
         tr.style.width = "0px";
-
         await new Promise(r => setTimeout(r, 500));
         tr.style.width = "250px";
         return 1;
 
     }
+
+  async function createInfoBox(msg){
+	const infoBox = document.createElement("div");
+        const lastCol = document.getElementById(col);
+        const colPosition = lastCol.getBoundingClientRect().left;
+
+	infoBox.textContent = msg;
+	infoBox.id = "info";
+
+	infoBox.style.position = "absolute"
+	infoBox.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+	infoBox.style.color = "white";
+	infoBox.style.padding = "10px";
+	infoBox.style.borderRadius = "5px";
+	infoBox.style.zIndex = 1000;
+	infoBox.style.maxWidth = "200px";
+	infoBox.style.whiteSpace = "nowrap";
+	infoBox.style.textOverflow = "ellipsis";
+	infoBox.style.overflow = "hidden";
+	infoBox.style.top = "40%";  // Position it at the center of the page
+	infoBox.style.left = `${colPosition}px`;	
+	infoBox.style.transform = "translate(-50%, -50%)";  // Center alignment
+	infoBox.style.transition = "opacity 0.3s ease";
+	infoBox.style.opacity = "1";  // Ensure it is visible
+
+	document.body.appendChild(infoBox);
+	console.log("made box");
+	return 0;
+  };
+
+  useEffect(() => {
+    const rows = document.querySelectorAll("tr");
+    rows.forEach((tr) => {
+      const handleMouseOver = (event) => {
+        const msg = tr.getAttribute("data-info");
+	createInfoBox(msg);
+        console.log(msg); // Show the msg (you can modify this to display it in a UI element)
+      };
+
+      const handleMouseLeave = () => {
+	const ibox = document.getElementById("info");
+      	ibox.remove();
+      };
+
+      tr.addEventListener("mouseover", handleMouseOver);
+      tr.addEventListener("mouseleave", handleMouseLeave);
+
+      return () => {
+        tr.removeEventListener("mouseover", handleMouseOver);
+	tr.removeEventListener("mouseleave", handleMouseLeave);	
+      };
+    });
+  }, [row, col]);
 
     useLayoutEffect(() => {
         if (colors.length > 0) {
