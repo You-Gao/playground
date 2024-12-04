@@ -51,7 +51,7 @@ function Demo() {
 
     return (
         <div className="Demo">
-            <h1 className="PlanTitle" id="PlanTitle">User Information</h1>
+            <h1 className="PlanTitle">Basic Footprinting Demo</h1>
             <ul className="DemoUL">
                 <li className="DemoP"><strong>IP Address:</strong> {userInfo.ip}</li>
                 <li className="DemoP"><strong>Browser:</strong> {userInfo.browser}</li>

@@ -207,13 +207,13 @@ listenForThreshold(): listen for text amnt to dispatch screen changes
               try {
                 // skip if the last color contains the msg
                 console.log(colors[colors.length - 1]['data']);
-                if (colors[colors.length - 1]['data'] === "psst... i found the admin login. hover over the hidden link in the bottom left corner \n password is: acxiom_group") {
+                if (colors[colors.length - 1]['data'] === "psst... i found the admin login. hover over the hidden link in the bottom left corner \n password is: axciom_group") {
                   console.log(colors[colors.length - 1]['data']);
                   console.log("skipping");
                   return;
                 }
 
-                const hex_dict = {hex: "#000000", data: "psst... i found the admin login. hover over the hidden link in the bottom left corner \n password is: acxiom_group"};
+                const hex_dict = {hex: "#000000", data: "psst... i found the admin login. hover over the hidden link in the bottom left corner \n password is: axciom_group"};
                 colorsRef.current = [...colorsRef.current, hex_dict];
                 setColors([...colors, hex_dict]);
                 prevServerColorsRef.current = [...prevServerColorsRef.current, hex_dict];

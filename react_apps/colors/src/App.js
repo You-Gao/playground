@@ -7,6 +7,8 @@ import ColorBlocks from './components/ColorBlocks';
 import Plan from './components/Plan';
 import Demo from './components/plan_components/Demo';
 import DataCapture from './components/plan_components/Data';
+import Website from './components/plan_components/Website';
+import Market from './components/plan_components/Market';
 
 function App() {
 
@@ -41,6 +43,8 @@ function App() {
   <Route path="/plan" element={<Plan />} >
      <Route path="demo" element={<Demo />} />
      <Route path="data" element={<DataCapture />} />
+     <Route path="website" element={<Website />} />
+     <Route path="market" element={<Market />} />
   </Route>
 </Routes>
   );

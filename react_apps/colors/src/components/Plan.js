@@ -7,7 +7,7 @@ function Plan(){
 
 	function listenForPassword(){
 		const password = document.getElementById('password').value;
-		if (password === ' '){
+		if (password === 'axciom_group'){
 			setLoggedIn(true);
 			// animate later
 			const password = document.getElementById('password');
@@ -54,6 +54,7 @@ function EvilPlan(){
 			// animate the title by adding each letter one by one
 			const title = document.getElementById('PlanTitle');
 			const titleText = "Project Briefing: Colors (JAADCEW)"; // just another aesthetic data capture and exfiltration website (JAADCEW)
+			title.innerHTML = '';
 			let i = 0;
 			const interval = setInterval(() => {
 				// if innerHTML is null (like when on subpage), set it to empty string
@@ -89,7 +90,6 @@ function EvilPlan(){
 			// set the title back to empty
 			try {
 				const title = document.getElementById('PlanTitle');
-				title.innerHTML = '';
 			} catch (e) {
 				console.log(e);
 			}
@@ -102,25 +102,25 @@ function EvilPlan(){
         <div className="PlanBody">
             {location.pathname === '/plan' && (
                 <div className="PlanHeader">
-                    <h1 className="PlanTitle" id="PlanTitle"></h1>
+                    <h1 className="PlanTitle" id="PlanTitle">Project Briefing: Colors (JAADCEW)</h1>
                     <ul className="PlanList">
                         <li> 
-                            Market Analysis
+                        <Link to="/plan/market">Economics of Data</Link>
                         </li>
                         <li>
-                            The Website
+						<Link to="/plan/website">Colors: User/Data Strategy</Link>
                         </li>
                         <li>
-                            <Link to="/plan/data">Data</Link>
+                            <Link to="/plan/data">Technical Report</Link>
                         </li>
                         <li>
-                            <Link to="/plan/demo">Demo</Link>
+                            <Link to="/plan/demo">Fingerprinting Demo</Link>
                         </li>
                     </ul>
                 </div>
             )}
-            <h1 id="Time"></h1>
-            <div className="TestLink">logged in as: ceo</div>
+			<div className="TIME"><h1 id="Time"></h1></div>
+            <div className="CEO">logged in as: ceo</div>
             <Outlet />
         </div>
     );

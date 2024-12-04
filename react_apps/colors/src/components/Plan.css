@@ -35,6 +35,16 @@
 	font-size: 2.5em;
 }
 
+.PlanList li a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.PlanList li a:hover {
+	color: rgb(74, 147, 255);
+	font-size: 1em;
+}
+
 .PlanList li:hover {
 	color: rgb(74, 147, 255);
 	font-size: 2.7em;
@@ -51,9 +61,73 @@
 	margin: 15px 10px;
 	text-align: left;
 	color: #fff;
-	font-size: 1.5em;
+	font-size: 1.35em;
+	text-decoration: none;
 }
 
 .DemoUL {
 	transform: translate(0%, 50%);
+}
+
+/* CEO */
+
+.CEO {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	transform: translate(0%,0%);
+	color: #fff;
+  font-size: 30px;
+  text-decoration: none;
+  font-family: "Comic Sans MS";
+}
+
+.TIME h1 {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	transform: translate(0%,50%);
+	color: #fff;
+	font-size: 30px;
+	text-decoration: none;
+	font-family: "Comic Sans MS";
+}
+
+/* Documents */
+.Document {
+	background: #000;
+}
+
+.Document .MainBody {
+	width: 80%;
+	height: 100%;
+	align-items: center;
+	padding-bottom: 100px;
+}
+
+.Document h1 {
+	font-size: 2.5em;
+	color: #fff;
+	text-align: center;
+	position: revert;
+	bottom: revert;
+	right: revert;
+	transform: revert;
+
+}
+
+.Document h2 {
+	font-size: 1.8em;
+	color: #fff;
+}
+
+.Document h3 {
+	font-size: 1.5em;
+	color: #fff;
+	margin: 15px 0;
+}
+
+.Document p {
+	font-size: 1.2em;
+	color: #fff;
 }
