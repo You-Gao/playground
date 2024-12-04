@@ -72,3 +72,14 @@ class StaticView(MethodView):
         file_path = os.path.join(react_build_path, app, 'build', 'static', type)
         print(file_path)
         return send_from_directory(file_path, file)
+
+@bp.route('/<string:app>/public/<string:folder>/<string:file>')
+class StaticView(MethodView):
+    def get(self, app, folder, file):
+        print(type)
+        print(file)
+        file_path = os.path.join(react_build_path, app, 'public', folder)
+        print(file_path)
+        return send_from_directory(file_path, file)
+
+

@@ -20,8 +20,8 @@ const Website = () => {
       <p>By wrapping data collection in an appealing, seamless design, we make it feel natural and unobtrusive. The aesthetic experience itself becomes the vehicle through which users willingly offer more, giving us the valuable information needed to refine and enhance their journey. In this way, aesthetics aren’t just a design choice—they’re a strategic tool to ensure both user satisfaction and business success.</p>
 
 	<div className="picture-grid2">
-      <img src='/ui/trojan.png'></img>
-      <img src='/ui/color.png'></img>
+      <img src='/mood/api/colors/public/ui/trojan.png'></img>
+      <img src='/mood/api/colors/public/ui/color.png'></img>
       </div>
 
 
@@ -34,7 +34,7 @@ const Website = () => {
       <p><strong>2023 Ad-Revenue:</strong> ~$2 Billion</p>
 
       <div className="picture-grid1">
-      <img src='/ui/wrapped.png'></img>
+      <img src='/mood/api/colors/public/ui/wrapped.png'></img>
       </div>
 
       <h3>Case Study 2: <a href="https://www.facebook.com/business/ads">Facebook</a></h3>
@@ -44,7 +44,7 @@ const Website = () => {
 
 	  
       <div className="picture-grid1">
-      <img src='/ui/ad.jpeg'></img>
+      <img src='/mood/api/colors/public/ui/ad.jpeg'></img>
       </div>
 
       <h3>Case Study 3: <a href="https://getstarted.tiktok.com/tt4b">TikTok</a></h3>
@@ -53,7 +53,7 @@ const Website = () => {
       <p><strong>2023 Ad-Revenue:</strong> ~$13 Billion</p>
 	  
       <div className="picture-grid1">
-      <img src='/ui/tiktok.png'></img>
+      <img src='/mood/api/colors/public/ui/tiktok.png'></img>
       </div>
 
       <h2>Current Features</h2>

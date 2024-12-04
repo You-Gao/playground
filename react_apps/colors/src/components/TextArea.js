@@ -79,7 +79,7 @@ changeQOTD(): updates the QOTD
 
       async function changeQOTD() {
         const QOTD = document.getElementById('QOTD');
-        const url = `http://localhost:5000/mood/api/questions/`;
+        const url = 'https://playground.yougao.dev/mood/api/questions/';
         console.log(url);
         const json = await getData(url);
         const qotd = json['question'];

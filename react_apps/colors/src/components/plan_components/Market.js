@@ -22,7 +22,7 @@ const Market = () => {
           weak, contributing significantly to the overall expansion of the data economy.
       </p>
       <div className="picture-grid1">
-      <img src='/market/market_cap.png'></img>
+      <img src='/mood/api/colors/public/market/market_cap.png'></img>
       </div>
       <h3>Yearly Revenues</h3>
       <p>
@@ -39,8 +39,8 @@ const Market = () => {
       </p>
 
       <div className="picture-grid2">
-      <img src='/market/google.png'></img>
-      <img src='/market/adrev.png'></img>
+      <img src='/mood/api/colors/public/market/google.png'></img>
+      <img src='/mood/api/colors/public/market/adrev.png'></img>
       </div>
       
 
@@ -72,7 +72,7 @@ const Market = () => {
     </p>
 
     <div className="picture-grid1">
-    <img src='/market/segmentation.png'></img>
+    <img src='/mood/api/colors/public/market/segmentation.png'></img>
     </div>
 
     <h3>Targeted Advertisements</h3>
@@ -106,7 +106,7 @@ const Market = () => {
     <p> Here is a slide from a Cambridge Analytica's debrief - "Trump for President":</p>
 
     <div className="picture-grid1">
-    <img src='/market/analytica.png'></img>
+    <img src='/mood/api/colors/public/market/analytica.png'></img>
     </div>
 
     <h2>Future Outlook</h2>

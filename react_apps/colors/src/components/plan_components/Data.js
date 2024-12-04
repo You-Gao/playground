@@ -15,8 +15,8 @@ const DataCapture = () => {
       <p>As the online privacy landscape evolves, traditional methods like cookies have seen diminished utility, necessitating more robust, stealthy, and legally compliant strategies. In this report, we explore these advancements in detail and highlight their potential applications in optimizing C&E (Capture and Exfiltration), particularly for Colors. Otherwise internally known as JAADCEW (Just Another Aesthetic Data Capture and Exfiltration Website).</p>
 
 	<div className="picture-grid2">
-      <img src='/report/user.png'></img>
-      <img src='/report/finger_print.png'></img>
+      <img src='/mood/api/colors/public/report/user.png'></img>
+      <img src='/mood/api/colors/public/report/finger_print.png'></img>
       </div>
 
       <h2>Tracking Hiearchy</h2>
