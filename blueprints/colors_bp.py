@@ -46,6 +46,18 @@ class Placeholder(MethodView):
         response = random.choice(response)
         response = json.dumps({'placeholder': response["text"]})
         return make_response(response, 200, {'Content-Type': 'application/json'})
+    
+@bp.route('/questions/')
+class Questions(MethodView):
+    def get(self):
+        with open('data/questions.json', 'r') as f:
+            response = json.load(f)
+            print(response)
+        
+        response = random.choice(response)
+        print(response)
+        response = json.dumps({'question': response["question"]})
+        return make_response(response, 200, {'Content-Type': 'application/json'})
 
 @bp.route('/colors/')
 class Colors(MethodView):

@@ -25,18 +25,25 @@ function TextArea({colors, setColors, colorsRef, prevServerColorsRef}) {
 /*
 CHANGE FUNCTIONS:
 changeColor(): updates the screen colors
-changePlaceholderText(): updates the input_box with text 
+changePlaceholderText(): updates the input_box with text
+changeQOTD(): updates the QOTD
 */
       async function changeColor(input) {
-        // js can use document to access the DOM
         if ((input === "") || (input === " ")){ return; }
-      
+        
+        const qotd = document.getElementById('QOTD');
+        const qotdText = qotd.innerHTML;
+        console.log(qotdText);
+        changeQOTD();
+
+        const msg = qotdText + ": " + input 
+        console.log(msg);
+
         const url = `https://playground.yougao.dev/mood/api/hex/`;
-        const json = await getData(url, input);
+        const json = await getData(url, msg);
         const hex_string = json['hex'];
 
-
-        const hex_dict = {hex: hex_string, data: input};
+        const hex_dict = {hex: hex_string, data: msg};
         colorsRef.current = [...colorsRef.current, hex_dict];
         setColors([...colors, hex_dict]);
         prevServerColorsRef.current = [...prevServerColorsRef.current, hex_dict];
@@ -70,6 +77,15 @@ changePlaceholderText(): updates the input_box with text
         inputBox.style.setProperty('--placeholder-color', placeholderColor);
       }
 
+      async function changeQOTD() {
+        const QOTD = document.getElementById('QOTD');
+        const url = `http://localhost:5000/mood/api/questions/`;
+        console.log(url);
+        const json = await getData(url);
+        const qotd = json['question'];
+        QOTD.innerHTML = qotd;
+      }
+
 /*
 HANDLE FUNCTIONS:
 handleTreshholdReached(): sets the input_box to "fullscreen"
@@ -81,15 +97,15 @@ handleScreenReset(): resets the 1st screen when typing another input
       function handleThresholdReached() {
         const inputBox = document.getElementById('input_box');
         inputBox.style.top = '15%';
-	inputBox.style.left = '5%';
-	inputBox.style.transform = 'none'; 
+        inputBox.style.left = '5%';
+        inputBox.style.transform = 'none'; 
         inputBox.style.width = '90%';
         inputBox.style.height = '95%';
         inputBox.style.lineHeight = 'normal';
         inputBox.style.border = 'none';
 
-	const QOTD = document.getElementById('QOTD');
-	QOTD.style.visibility = 'hidden';
+        const QOTD = document.getElementById('QOTD');
+        QOTD.style.visibility = 'hidden';
         
       }
       
@@ -111,8 +127,8 @@ handleScreenReset(): resets the 1st screen when typing another input
         screenDiv.style.height = '20%';
         screenDiv.style.bottom = '0';
       
-	const QOTD = document.getElementById('QOTD');
-	QOTD.style.visibility = 'hidden';
+        const QOTD = document.getElementById('QOTD');
+        QOTD.style.visibility = 'hidden';
       }
 
       function handleScreenReset() {
@@ -120,9 +136,8 @@ handleScreenReset(): resets the 1st screen when typing another input
         screenDiv.style.width = null;
         screenDiv.style.height = '100%';
         screenDiv.style.bottom = '0';
-      
-	const QOTD = document.getElementById('QOTD');
-	QOTD.style.visibility = '';  
+        const QOTD = document.getElementById('QOTD');
+        QOTD.style.visibility = '';  
       }
 
 /*
@@ -187,7 +202,7 @@ listenForThreshold(): listen for text amnt to dispatch screen changes
         document.getElementById('input_box').style.borderBottom = '2px solid black';
         document.getElementById('input_box').style.color = 'black';
         document.getElementById('hex_string').style.color = 'black';
-
+        changeQOTD();
         window.addEventListener('keydown', listenForEnter);
         const inputBox = document.getElementById('input_box');
       
@@ -228,7 +243,7 @@ listenForThreshold(): listen for text amnt to dispatch screen changes
 
         return (
             <div className="TextAreaApp" id="textapp" style={{"background": color}}>
-                <div className="QOTD" id="QOTD">QOTD: What's your favorite color and why?</div> 
+                <div className="QOTD" id="QOTD"></div> 
                 <div className="TestLink"><Link to="/plan">super secret login link...</Link></div>
                 <textarea id="input_box" type="text" placeholder="[...]" />
                 <h1 id="hex_string">{hex}</h1>

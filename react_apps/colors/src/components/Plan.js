@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import './Plan.css';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
-function Plan(){
-	const [loggedIn, setLoggedIn] = useState(false);
+function Plan(loggedIn, setLoggedIn) {
 
 	function listenForPassword(){
 		const password = document.getElementById('password').value;

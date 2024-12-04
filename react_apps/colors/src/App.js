@@ -15,6 +15,7 @@ function App() {
   const [colors, setColors] = useState([]);
   const prevServerColorsRef = useRef([]);
   const colorsRef = useRef([]);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     console.log("Updated colors:", colors);
@@ -40,7 +41,11 @@ function App() {
     </>                                                                       
     } 
   />
-  <Route path="/plan" element={<Plan />} >
+  <Route path="/plan" element={
+    <Plan 
+      loggedIn={loggedIn} 
+      setLoggedIn={setLoggedIn}
+    />} >
      <Route path="demo" element={<Demo />} />
      <Route path="data" element={<DataCapture />} />
      <Route path="website" element={<Website />} />

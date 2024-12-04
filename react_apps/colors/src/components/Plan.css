@@ -131,3 +131,50 @@
 	font-size: 1.2em;
 	color: #fff;
 }
+
+.picture-grid1 {
+	display: grid;
+	grid-template-columns: repeat(1, 1fr); /* Keeps the 2-column layout */
+	grid-column-gap: 10px; /* Adjusts the gap between columns (horizontal) */
+	grid-row-gap: 0px; /* Reduces the gap between rows (vertical) */
+	max-width: 600px; /* Adjust based on your preference */
+	margin: auto; /* Center the grid horizontally */
+	margin-top: 30px;
+	margin-bottom: 30px;
+	align-items: center;
+	justify-content: center;
+	place-items: center;
+}
+
+.picture-grid1 img {
+	width: 100%; /* Makes images fill their container */
+	height: 100%; /* Maintains aspect ratio */
+	align-items: center; 
+	justify-content: center;
+	object-fit: fill;
+		max-height: 300px;
+	}
+
+.picture-grid2 {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr); /* Keeps the 2-column layout */
+	grid-column-gap: 75px; /* Adjusts the gap between columns (horizontal) */
+	grid-row-gap: 0px; /* Reduces the gap between rows (vertical) */
+	max-width: 800px; /* Adjust based on your preference */
+	margin: auto; /* Center the grid horizontally */
+	margin-top: 30px;
+	margin-bottom: 30px;
+	align-items: center;
+	justify-content: center;
+	place-items: center;
+		}
+
+.picture-grid2 img {
+	width: 100%; /* Makes images fill their container */
+	height: 100%; /* Maintains aspect ratio */
+	align-items: center; 
+	justify-content: center;
+	object-fit: fill;
+	max-width: 400px;
+	max-height: 300px;
+	}
