@@ -1,6 +1,6 @@
 [
     {
-        "question": "What's a logo you'd get tattooed if forced?"
+        "question": "What's a logo you'd get tattooed?"
     },
     {
         "question": "What is your favorite color and why?"
@@ -15,12 +15,34 @@
         "question": "If you could teleport anywhere, where, why?"
     },
     {
-        "question": "What's your favorite holiday tradition or celebration?"
+        "question": "What's your favorite holiday tradition?"
     },
     {
         "question": "Favorite thing to snack on while working?"
     },
     {
         "question": "Which month is your favorite?"
-    }
+    },
+    {
+	    "question": "Think of a number 1-10"
+    },
+    {
+	    "question": "If you could time travel, past or future?"
+    },
+    {
+	    "question": "Top 3 comfort foods when you are stressed?"
+    },
+    {
+	    "question": "What's the most impactful quote you have read?"
+},
+{
+	"question": "What's a piece of advice everyone should hear?"
+},
+	{
+		"question": "Fight one horse-sized duck or a hundred duck-sized horses?"
+	},
+	{
+		"question": "What's a hobby you never have time for?"
+	}
+
 ]
