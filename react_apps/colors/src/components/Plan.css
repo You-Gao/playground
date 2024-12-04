@@ -137,6 +137,12 @@
 	color: #fff;
 }
 
+.Document img {
+	width: 1px;
+	height: 1px;
+	display: none;
+}
+
 .picture-grid1 {
 	display: grid;
 	grid-template-columns: repeat(1, 1fr); /* Keeps the 2-column layout */
