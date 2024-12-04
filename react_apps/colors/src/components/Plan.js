@@ -6,7 +6,7 @@ function Plan(){
 
 	function listenForPassword(){
 		const password = document.getElementById('password').value;
-		if (password === ' '){
+		if (password === 'acxiom_group'){
 			setLoggedIn(true);
 			// animate later
 			const password = document.getElementById('password');

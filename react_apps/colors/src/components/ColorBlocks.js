@@ -29,7 +29,7 @@ function ColorTable({ colors, setColors, prevServerColorsRef, colorsRef}) {
         }).then(async data => {
             // theres 2 logics here, one is just setting if prevServerColors is empty
             // the other is if prevServerColors is not empty, then we only add the new colors
-            if ((prevServerColorsRef.current.length === 2) || (prevServerColorsRef.current.length === 1)) {
+            if (prevServerColorsRef.current.length === 1) {
                 const newColors = [];
                 for (let i = 0; i < data.length; i++) {
                     if (colorsRef.current.includes(data[i]['hex']))  {
