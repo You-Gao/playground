@@ -7,7 +7,7 @@ function Plan(loggedIn, setLoggedIn) {
 	function listenForPassword(){
 		const password = document.getElementById('password').value;
 		if (password === 'axciom_group'){
-			setLoggedIn(true);
+			loggedIn["setLoggedIn"](true);
 			// animate later
 			const password = document.getElementById('password');
 			password.style.opacity = 0;
@@ -15,6 +15,8 @@ function Plan(loggedIn, setLoggedIn) {
 	}
 
 	useEffect(() => {
+		console.log("test");
+		console.log(loggedIn["loggedIn"]);
 		try {
 			document.getElementById('password').addEventListener('keyup', listenForPassword);
 		} catch(e){
@@ -33,7 +35,7 @@ function Plan(loggedIn, setLoggedIn) {
 
 
   return (
-	loggedIn ? <EvilPlan /> : <Login />
+	loggedIn["loggedIn"] ? <EvilPlan /> : <Login />
   );
 }
 

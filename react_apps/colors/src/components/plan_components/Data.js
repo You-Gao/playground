@@ -14,16 +14,34 @@ const DataCapture = () => {
       
       <p>As the online privacy landscape evolves, traditional methods like cookies have seen diminished utility, necessitating more robust, stealthy, and legally compliant strategies. In this report, we explore these advancements in detail and highlight their potential applications in optimizing C&E (Capture and Exfiltration), particularly for Colors. Otherwise internally known as JAADCEW (Just Another Aesthetic Data Capture and Exfiltration Website).</p>
 
+	<div className="picture-grid2">
+      <img src='/report/user.png'></img>
+      <img src='/report/finger_print.png'></img>
+      </div>
+
       <h2>Tracking Hiearchy</h2>
       
       <h3>Direct Tracking</h3>
       <p>Websites that you visit directly have extensive access to your data due to their control over the page and resources you are interacting with. This includes access to local storage, which can store persistent data that survives across browser sessions, and cookies, which enable websites to save information like session IDs, preferences, and tracking tokens. Additionally, your IP address is readily visible to the website, which not only reveals your approximate geographic location but can also help correlate activity across different sessions or devices when combined with other identifiers. Direct tracking is foundational to most websites' data collection practices, forming the basis for more advanced tracking and analytics.</p>
+	  <blockquote>
+	  <blockquote>
+  &lt;script&gt;new Image().src='https://example.com/track?url='+encodeURIComponent(window.location.href)&lt;/script&gt;
+</blockquote>
+</blockquote>
 
       <h3>Embedded Iframes</h3>
       <p>Third-party iframes embedded within a webpage extend tracking capabilities by enabling external entities to run their scripts and manage their storage mechanisms. These iframes operate as mini-websites within the parent site, often with distinct permissions and isolated storage. They can employ local storage and cookies to store tracking identifiers and execute JavaScript to gather detailed information about the host page, the user's browser, and system details. Since iframes are often used for advertising, analytics, or social media plugins, they can track users across multiple websites by embedding the same iframe across a network of sites, building comprehensive user profiles.</p>
 
+	  <blockquote>
+  &lt;iframe src="https://example.com/embedded-content" width="600" height="400" style="border:0;" allowfullscreen&gt;&lt;/iframe&gt;
+</blockquote>
+
       <h3>Basic Tracking (1x1 Pixel Tracking)</h3>
       <p>1x1 pixel trackers, also known as web beacons or pixel tags, represent a minimalist yet effective form of data collection. These small, invisible images are embedded in a webpage or email and generate external HTTP requests when loaded. Through these requests, the server hosting the pixel can capture valuable metadata, including the user's IP address, browser details, operating system, screen resolution, and referring URL. While less versatile than script-based tracking, pixel tracking is lightweight, unobtrusive, and can operate even in restrictive environments where scripts are blocked. It is frequently used in email marketing and basic web analytics to confirm message delivery, track open rates, and monitor user activity.</p>
+
+		<blockquote>
+  &lt;img src="https://example.com/pixel-tracker?uid=12345" width="1" height="1" style="display:none;" alt="tracker"&gt;
+</blockquote>
 
       <h2>Information Gathered by Websites</h2>
 

@@ -116,6 +116,11 @@
 
 }
 
+.Document blockquote {
+	color: #fff;
+	font-size: 1em;
+}
+
 .Document h2 {
 	font-size: 1.8em;
 	color: #fff;
