@@ -133,11 +133,16 @@ handleScreenReset(): resets the 1st screen when typing another input
 
       function handleScreenReset() {
         const screenDiv = document.getElementById('textapp');
-        screenDiv.style.width = null;
+        const QOTD = document.getElementById('QOTD');
+
+	if (screenDiv.style.height !== '100%') {
+	  QOTD.style.visibility = '';  // Make QOTD visible only if the height is not 100%
+	}
+	
+	screenDiv.style.width = null;
         screenDiv.style.height = '100%';
         screenDiv.style.bottom = '0';
-        const QOTD = document.getElementById('QOTD');
-        QOTD.style.visibility = '';  
+        
       }
 
 /*
@@ -205,12 +210,13 @@ listenForThreshold(): listen for text amnt to dispatch screen changes
         changeQOTD();
         window.addEventListener('keydown', listenForEnter);
         const inputBox = document.getElementById('input_box');
-      
+        inputBox.addEventListener('mouseover', handleScreenReset); 
         inputBox.addEventListener('input', listenForTreshold);
       
         return () => {
           window.removeEventListener('keydown', listenForEnter);
-          window.removeEventListener('input', listenForTreshold); 
+          window.removeEventListener('input', listenForTreshold);
+	  inputBox.removeEventListener('mouseover', handleScreenReset);
         }
       
         }, []);
@@ -237,7 +243,7 @@ listenForThreshold(): listen for text amnt to dispatch screen changes
 
               } catch (e) {
               }
-          }, 30000);
+          }, 60000);
           return () => clearInterval(interval);
       }, [colors]);
 
