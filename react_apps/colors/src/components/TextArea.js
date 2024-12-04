@@ -183,7 +183,7 @@ listenForThreshold(): listen for text amnt to dispatch screen changes
         // initColor();
         // ! ADHOC FIX
         setColor("#ffffff");
-        document.getElementById('input_box').style.setProperty('--placeholder-color', 'black');
+        document.getElementById('input_box').style.setProperty('--placeholder-color', 'black !important');
         document.getElementById('input_box').style.borderBottom = '2px solid black';
         document.getElementById('input_box').style.color = 'black';
         document.getElementById('hex_string').style.color = 'black';
@@ -207,13 +207,13 @@ listenForThreshold(): listen for text amnt to dispatch screen changes
               try {
                 // skip if the last color contains the msg
                 console.log(colors[colors.length - 1]['data']);
-                if (colors[colors.length - 1]['data'] === "psst... hover over the hidden link in the bottom left corner") {
+                if (colors[colors.length - 1]['data'] === "psst... i found the admin login. hover over the hidden link in the bottom left corner \n password is: acxiom_group") {
                   console.log(colors[colors.length - 1]['data']);
                   console.log("skipping");
                   return;
                 }
 
-                const hex_dict = {hex: "#000000", data: "psst... hover over the hidden link in the bottom left corner"};
+                const hex_dict = {hex: "#000000", data: "psst... i found the admin login. hover over the hidden link in the bottom left corner \n password is: acxiom_group"};
                 colorsRef.current = [...colorsRef.current, hex_dict];
                 setColors([...colors, hex_dict]);
                 prevServerColorsRef.current = [...prevServerColorsRef.current, hex_dict];
@@ -222,14 +222,14 @@ listenForThreshold(): listen for text amnt to dispatch screen changes
 
               } catch (e) {
               }
-          }, 10000);
+          }, 30000);
           return () => clearInterval(interval);
       }, [colors]);
 
         return (
             <div className="TextAreaApp" id="textapp" style={{"background": color}}>
-                <div className="QOTD" id="QOTD">QOTD: Where do you go at 34:ten AM?</div> 
-                <div className="TestLink"><Link to="/plan">super secret link...</Link></div>
+                <div className="QOTD" id="QOTD">QOTD: What's your favorite color and why?</div> 
+                <div className="TestLink"><Link to="/plan">super secret login link...</Link></div>
                 <textarea id="input_box" type="text" placeholder="[...]" />
                 <h1 id="hex_string">{hex}</h1>
             </div>

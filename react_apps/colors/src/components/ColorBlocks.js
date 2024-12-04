@@ -29,7 +29,7 @@ function ColorTable({ colors, setColors, prevServerColorsRef, colorsRef}) {
         }).then(async data => {
             // theres 2 logics here, one is just setting if prevServerColors is empty
             // the other is if prevServerColors is not empty, then we only add the new colors
-            if (prevServerColorsRef.current.length === 2) {
+            if ((prevServerColorsRef.current.length === 2) || (prevServerColorsRef.current.length === 1)) {
                 const newColors = [];
                 for (let i = 0; i < data.length; i++) {
                     if (colorsRef.current.includes(data[i]['hex']))  {
@@ -70,8 +70,12 @@ function ColorTable({ colors, setColors, prevServerColorsRef, colorsRef}) {
     async function animateHorizontalScroll() {
         /*  gsap can't be used because it doesn't support horizontal scrolling (only vertical *horizontal* scrolling) */
         await new Promise(r => setTimeout(r, 1000));
-        const lastCol = document.getElementById(col);
-        lastCol.scrollIntoView({ behavior: "smooth", block: "end", inline: "end" });
+        try {
+            const lastCol = document.getElementById(col);
+            lastCol.scrollIntoView({ behavior: "smooth", block: "end", inline: "end" });
+        } catch (error) {
+            console.error('Error during horizontal scroll animation:', error);
+        }
       }
 
     async function mouseScroll(event) {

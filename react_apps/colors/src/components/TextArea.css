@@ -26,8 +26,8 @@ textarea {
       }
   }
   
-  textarea::placeholder {
-    color: #ffffff; /* Gray color */
+  .TextAreaApp textarea::placeholder {
+    color: black; /* Gray color */
     font-style: italic;
     font-weight: normal;
   }
@@ -64,10 +64,14 @@ textarea {
   }
 
   .TestLink a {
-    color: black;
+    color: rgb(170, 167, 167);
     text-decoration: none;
     visibility: hidden;
     transition: visibility 1s ease;
+  }
+  
+  .TestLink:hover a {
+    visibility: visible;
   }
 
   .QOTD {
