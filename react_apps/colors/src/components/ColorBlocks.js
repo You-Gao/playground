@@ -29,8 +29,6 @@ function ColorTable({ colors, setColors, prevServerColorsRef, colorsRef}) {
         }).then(async data => {
             // theres 2 logics here, one is just setting if prevServerColors is empty
             // the other is if prevServerColors is not empty, then we only add the new colors
-            console.log("PrevServerColors:", prevServerColorsRef.current);
-            console.log("Length:", prevServerColorsRef.current.length);
             if (prevServerColorsRef.current.length === 2) {
                 const newColors = [];
                 for (let i = 0; i < data.length; i++) {
@@ -44,18 +42,15 @@ function ColorTable({ colors, setColors, prevServerColorsRef, colorsRef}) {
                 prevServerColorsRef.current = [...prevServerColorsRef.current, ...newColors];
             }
             else {
-                console.log("ELSE BLOCK");
                 const newColors = [];
                 for (let i = 0; i < data.length; i++) {
                     try {
                         if ((prevServerColorsRef.current.find(color => color['hex'] === data[i]['hex']) &&
-                        prevServerColorsRef.current.find(color => color['text'] === data[i]['text'])) || 
+                        prevServerColorsRef.current.find(color => color['data'] === data[i]['data'])) || 
                         colorsRef.current.includes(data[i]['hex'])) {
-                            console.log("Color already exists in colors or prevServerColors");
                             continue;
                         }
                     } catch (error) {
-                        console.error('Error comparing colors:', error);
                     }
                     if (colorsRef.current.includes(data[i]['hex']))  {
                         continue;
@@ -79,7 +74,25 @@ function ColorTable({ colors, setColors, prevServerColorsRef, colorsRef}) {
         lastCol.scrollIntoView({ behavior: "smooth", block: "end", inline: "end" });
       }
 
-      async function addNewColorToTable(hex, msg) {
+    async function mouseScroll(event) {
+        if (event.clientX < 200) {
+            window.scrollBy({
+                top: 0,
+                left: -400,
+                behavior: "smooth"
+            });
+        }
+
+        if (event.clientX > 1000) {
+            window.scrollBy({
+                top: 0,
+                left: 400,
+                behavior: "smooth"
+            });
+        }
+    }
+
+    async function addNewColorToTable(hex, msg) {
         const table = document.getElementById("blocks");
 
         if (rowRef.current  === 4) {
@@ -107,32 +120,16 @@ function ColorTable({ colors, setColors, prevServerColorsRef, colorsRef}) {
 
     }
 
-  async function createInfoBox(msg){
+function createInfoBox(msg, colPosition, colTop){
 	const infoBox = document.createElement("div");
-        const lastCol = document.getElementById(col);
-        const colPosition = lastCol.getBoundingClientRect().left;
-
 	infoBox.textContent = msg;
 	infoBox.id = "info";
+    infoBox.className = "InfoBox";
 
-	infoBox.style.position = "absolute"
-	infoBox.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-	infoBox.style.color = "white";
-	infoBox.style.padding = "10px";
-	infoBox.style.borderRadius = "5px";
-	infoBox.style.zIndex = 1000;
-	infoBox.style.maxWidth = "200px";
-	infoBox.style.whiteSpace = "nowrap";
-	infoBox.style.textOverflow = "ellipsis";
-	infoBox.style.overflow = "hidden";
-	infoBox.style.top = "40%";  // Position it at the center of the page
-	infoBox.style.left = `${colPosition}px`;	
-	infoBox.style.transform = "translate(-50%, -50%)";  // Center alignment
-	infoBox.style.transition = "opacity 0.3s ease";
-	infoBox.style.opacity = "1";  // Ensure it is visible
+	infoBox.style.top = `${colTop + window.scrollY}px`;
+	infoBox.style.left = `${colPosition + window.scrollX}px`;	
 
 	document.body.appendChild(infoBox);
-	console.log("made box");
 	return 0;
   };
 
@@ -141,34 +138,50 @@ function ColorTable({ colors, setColors, prevServerColorsRef, colorsRef}) {
     rows.forEach((tr) => {
       const handleMouseOver = (event) => {
         const msg = tr.getAttribute("data-info");
-	createInfoBox(msg);
-        console.log(msg); // Show the msg (you can modify this to display it in a UI element)
+        const colPosition = tr.getBoundingClientRect().left;
+        const colTop = tr.getBoundingClientRect().top;
+
+        let infoBox = document.getElementById("info");
+        if (!infoBox) {
+            createInfoBox(msg, colPosition, colTop);
+        }
       };
 
       const handleMouseLeave = () => {
-	const ibox = document.getElementById("info");
-      	ibox.remove();
+        const infoBox = document.getElementById("info");
+        if (infoBox) {
+          infoBox.remove();
+        }
       };
 
       tr.addEventListener("mouseover", handleMouseOver);
       tr.addEventListener("mouseleave", handleMouseLeave);
+      tr.addEventListener("mousemove", mouseScroll);
 
       return () => {
         tr.removeEventListener("mouseover", handleMouseOver);
-	tr.removeEventListener("mouseleave", handleMouseLeave);	
+	    tr.removeEventListener("mouseleave", handleMouseLeave);
+        tr.removeEventListener("mousemove", mouseScroll);
       };
     });
   }, [row, col]);
 
     useLayoutEffect(() => {
         if (colors.length > 0) {
-            addNewColorToTable(colors[colors.length - 1]);
+            const newestColor = colors[colors.length - 1];
+            const newestColorHex = colors[colors.length - 1]['hex'];
+            const newestColorText = colors[colors.length - 1]['data'];
+            addNewColorToTable(newestColorHex, newestColorText);
+
         }
     }, [colors]);
 
     useEffect(() => {
         animateHorizontalScroll();
+
     }, [col, row]);
+
+
 
     useEffect(() => {
         const interval = setInterval(() => {

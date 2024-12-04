@@ -57,7 +57,17 @@ textarea {
 	  position: absolute;
 	  bottom: 0%;
 	  left: 0%;
-	  transform: translate(50%,50%);
+	  transform: translate(0%,0%);
+    font-size: 30px;
+    text-decoration: none;
+    font-family: "Comic Sans MS";
+  }
+
+  .TestLink a {
+    color: black;
+    text-decoration: none;
+    visibility: hidden;
+    transition: visibility 1s ease;
   }
 
   .QOTD {

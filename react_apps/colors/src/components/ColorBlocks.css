@@ -45,3 +45,15 @@
   tr:hover {
     transform: scale(1.05);
   }
+
+  .InfoBox {
+    position: absolute;
+    background-color: rgba(128, 128, 128, 0.5);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1000;
+    max-width: 250px;
+    word-wrap: break-word;
+    width: 30%;
+  }

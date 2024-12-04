@@ -36,9 +36,9 @@ changePlaceholderText(): updates the input_box with text
         const hex_string = json['hex'];
 
 
-        colorsRef.current = [...colorsRef.current, hex_string];
-        setColors([...colors, hex_string]);
         const hex_dict = {hex: hex_string, data: input};
+        colorsRef.current = [...colorsRef.current, hex_dict];
+        setColors([...colors, hex_dict]);
         prevServerColorsRef.current = [...prevServerColorsRef.current, hex_dict];
         setColor(hex_string);
         setHex(hex_string);
@@ -80,7 +80,6 @@ handleScreenReset(): resets the 1st screen when typing another input
 
       function handleThresholdReached() {
         const inputBox = document.getElementById('input_box');
-        console.log("Threshold reached!");
         inputBox.style.top = '15%';
 	inputBox.style.left = '5%';
 	inputBox.style.transform = 'none'; 
@@ -96,7 +95,6 @@ handleScreenReset(): resets the 1st screen when typing another input
       
       function handleBoxReset() {
         const inputBox = document.getElementById('input_box');
-        console.log("Setting the box back!");
         inputBox.style.top = null;
         inputBox.style.left = null;
         inputBox.style.transform = null;
@@ -183,14 +181,14 @@ listenForThreshold(): listen for text amnt to dispatch screen changes
       // uses the functions above to set-up the first screen
       useEffect(() => {
         // initColor();
-	// ! ADHOC FIX
-	setColor("#ffffff");
+        // ! ADHOC FIX
+        setColor("#ffffff");
         document.getElementById('input_box').style.setProperty('--placeholder-color', 'black');
         document.getElementById('input_box').style.borderBottom = '2px solid black';
         document.getElementById('input_box').style.color = 'black';
         document.getElementById('hex_string').style.color = 'black';
 
-	window.addEventListener('keydown', listenForEnter);
+        window.addEventListener('keydown', listenForEnter);
         const inputBox = document.getElementById('input_box');
       
         inputBox.addEventListener('input', listenForTreshold);
@@ -202,11 +200,37 @@ listenForThreshold(): listen for text amnt to dispatch screen changes
       
         }, []);
 
+        useEffect(() => {
+          const interval = setInterval(() => {
+              // send a msg that says
+              // "psst... hover over the hidden link in the bottom left corner"
+              try {
+                // skip if the last color contains the msg
+                console.log(colors[colors.length - 1]['data']);
+                if (colors[colors.length - 1]['data'] === "psst... hover over the hidden link in the bottom left corner") {
+                  console.log(colors[colors.length - 1]['data']);
+                  console.log("skipping");
+                  return;
+                }
+
+                const hex_dict = {hex: "#000000", data: "psst... hover over the hidden link in the bottom left corner"};
+                colorsRef.current = [...colorsRef.current, hex_dict];
+                setColors([...colors, hex_dict]);
+                prevServerColorsRef.current = [...prevServerColorsRef.current, hex_dict];
+                setColor("#000000");
+                setHex("#000000");
+
+              } catch (e) {
+              }
+          }, 10000);
+          return () => clearInterval(interval);
+      }, [colors]);
+
         return (
             <div className="TextAreaApp" id="textapp" style={{"background": color}}>
-		<div className="QOTD" id="QOTD">QOTD: Where do you go at 34:ten AM?</div> 
-	    	<div className="TestLink"><Link to="/plan">Test</Link></div>
-		<textarea id="input_box" type="text" placeholder="[...]" />
+                <div className="QOTD" id="QOTD">QOTD: Where do you go at 34:ten AM?</div> 
+                <div className="TestLink"><Link to="/plan">super secret link...</Link></div>
+                <textarea id="input_box" type="text" placeholder="[...]" />
                 <h1 id="hex_string">{hex}</h1>
             </div>
         );
