@@ -17,7 +17,7 @@
 
 .PlanList {
 	position: absolute;
-    transform: translate(20%, 60%);
+    transform: translate(20%, 45%);
 	width: 100%;
 	text-align: left;
 }
@@ -45,3 +45,15 @@
     font-style: italic;
     font-weight: normal;
   }
+
+/* Demo */
+.DemoP {
+	margin: 15px 10px;
+	text-align: left;
+	color: #fff;
+	font-size: 1.5em;
+}
+
+.DemoUL {
+	transform: translate(0%, 50%);
+}

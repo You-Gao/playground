@@ -5,6 +5,8 @@ import {Route, Routes } from 'react-router-dom';
 import TextArea from './components/TextArea';
 import ColorBlocks from './components/ColorBlocks';
 import Plan from './components/Plan';
+import Demo from './components/plan_components/Demo';
+import DataCapture from './components/plan_components/Data';
 
 function App() {
 
@@ -32,11 +34,14 @@ function App() {
           setColors={setColors} 
           prevServerColorsRef={prevServerColorsRef} 
           colorsRef={colorsRef} 
-        />
-      </>
+        />  
+    </>                                                                       
     } 
   />
-  <Route path="/plan" element={<Plan />} />
+  <Route path="/plan" element={<Plan />} >
+     <Route path="demo" element={<Demo />} />
+     <Route path="data" element={<DataCapture />} />
+  </Route>
 </Routes>
   );
 }
