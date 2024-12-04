@@ -129,11 +129,25 @@ handleScreenReset(): resets the 1st screen when typing another input
       
         const QOTD = document.getElementById('QOTD');
         QOTD.style.visibility = 'hidden';
+
+	setTimeout(function() {
+const inputBox = document.getElementById('input_box');
+	inputBox.addEventListener('mouseover', handleScreenReset);
+	}, 2000); // 2000 milliseconds (2 seconds) delay before adding the event listener
+
       }
 
       function handleScreenReset() {
         const screenDiv = document.getElementById('textapp');
         const QOTD = document.getElementById('QOTD');
+
+	try {
+const inputBox = document.getElementById('input_box');
+		inputBox.removeEventListener("mouseover", handleScreenReset);
+	}
+	      catch (e) {
+		      console.log(e)
+	      }
 
 	if (screenDiv.style.height !== '100%') {
 	  QOTD.style.visibility = '';  // Make QOTD visible only if the height is not 100%
@@ -209,14 +223,12 @@ listenForThreshold(): listen for text amnt to dispatch screen changes
         document.getElementById('hex_string').style.color = 'black';
         changeQOTD();
         window.addEventListener('keydown', listenForEnter);
-        const inputBox = document.getElementById('input_box');
-        inputBox.addEventListener('mouseover', handleScreenReset); 
+        const inputBox = document.getElementById('input_box'); 
         inputBox.addEventListener('input', listenForTreshold);
       
         return () => {
           window.removeEventListener('keydown', listenForEnter);
           window.removeEventListener('input', listenForTreshold);
-	  inputBox.removeEventListener('mouseover', handleScreenReset);
         }
       
         }, []);
@@ -241,9 +253,16 @@ listenForThreshold(): listen for text amnt to dispatch screen changes
                 setColor("#000000");
                 setHex("#000000");
 
+		document.getElementById('input_box').style.setProperty('--placeholder-color', 'white !important');
+            	document.getElementById('input_box').style.borderBottom = '2px solid white';
+            	document.getElementById('input_box').style.color = 'white';
+		document.getElementById('input_box').value = 'check the wall';
+            	document.getElementById('hex_string').style.color = 'white';
+		document.getElementById('QOTD').style.color = 'white';
+
               } catch (e) {
               }
-          }, 60000);
+          }, 65000);
           return () => clearInterval(interval);
       }, [colors]);
 
