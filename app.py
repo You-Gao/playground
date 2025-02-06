@@ -17,8 +17,6 @@ app.config["OPENAPI_VERSION"] = "3.0.2"
 app.config["OPENAPI_URL_PREFIX"] = "/api/docs"
 app.config["OPENAPI_SWAGGER_UI_PATH"] = "/"
 app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.23.11/"
-app.config["OPENAPI_REDOC_PATH"] = "/redoc"
-app.config["OPENAPI_REDOC_URL"] = "https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"
 
 api = Api(app)
 api.register_blueprint(react_bp)
