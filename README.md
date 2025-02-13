@@ -1,6 +1,8 @@
 # playground
 as said above, playground for apps and ideas i have
 
+why the flask app? it was deployed on heroku and i wanted it to act as a server for n-react apps.
+
 ### Learning Notes
 * Remember to clean-up your component **always**
 * React is powerful because it manages hooks and states which are bundled into components
